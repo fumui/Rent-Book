@@ -1,9 +1,9 @@
 const conn = require('../configs/db')
 
 module.exports = {
-    insertBook: (data) => {
+    insertBorrowing: (data) => {
         return new Promise((resolve, reject) => {
-            conn.query('INSERT books SET ?', data, (err, result) =>{
+            conn.query('INSERT borrowings SET ?', data, (err, result) =>{
                 if(err) 
                     reject(err)
                 else 
@@ -11,9 +11,9 @@ module.exports = {
             })
         })
     },
-    getAllBook: () => {
+    getAllBorrowing: () => {
         return new Promise((resolve, reject) => {
-            conn.query('SELECT * FROM books', (err, result) =>{
+            conn.query('SELECT * FROM borrowings', (err, result) =>{
                 if(err) 
                     reject(err)
                 else 
@@ -21,9 +21,9 @@ module.exports = {
             })
         })
     },
-    updateBook: (id, data) => {
+    returningBook: (id, data) => {
         return new Promise((resolve, reject) => {
-            conn.query('UPDATE books SET ? where id = ?', [data, id], (err, result) =>{
+            conn.query('UPDATE borrowings SET ? where id = ?', [data, id], (err, result) =>{
                 if(err) 
                     reject(err)
                 else 
@@ -31,19 +31,9 @@ module.exports = {
             })
         })
     },
-    setAvailability: (id, availability) => {
+    deleteBorrowing: (id) => {
         return new Promise((resolve, reject) => {
-            conn.query('UPDATE books SET availability = ? where id = ?', [availability, id], (err, result) =>{
-                if(err) 
-                    reject(err)
-                else 
-                    resolve(result)
-            })
-        })
-    },
-    deleteBook: (id) => {
-        return new Promise((resolve, reject) => {
-            conn.query('DELETE FROM books WHERE id = ?', id, (err, result) =>{
+            conn.query('DELETE FROM borrowings WHERE id = ?', id, (err, result) =>{
                 if(err) 
                     reject(err)
                 else 

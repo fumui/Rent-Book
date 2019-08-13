@@ -18,9 +18,16 @@ module.exports = {
             .catch(err => console.error(err))
     },
     getAllBook : (req, res)=>{
-        modelBooks.getAllBook()
+        const sort = req.query.sortby;
+        const availability = req.query.availability;
+        const page = req.query.page || 1
+        const limit = req.query.limit || 10
+        const start = (Number(page) - 1) * limit 
+        
+        modelBooks.getAllBook(sort, availability, start, limit)
             .then(result => res.json(result))
             .catch(err => console.error(err))
+        
     },
     searchBooksByTitle : (req, res)=>{
         const keyword = req.params.keyword

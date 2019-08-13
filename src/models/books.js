@@ -11,9 +11,16 @@ module.exports = {
             })
         })
     },
-    getAllBook: () => {
+    getAllBook: (sort = null, availability = null, start, limit) => {
         return new Promise((resolve, reject) => {
-            conn.query('SELECT * FROM books', (err, result) =>{
+
+            let query = 'SELECT * FROM books '
+            if(availability != null)
+                query += `WHERE availability = ${availability} `
+            if(sort != null)
+                query += `ORDER BY ${sort} `
+
+            conn.query(query +`LIMIT ${start}, ${limit}`, (err, result) =>{
                 if(err) 
                     reject(err)
                 else 
@@ -57,6 +64,16 @@ module.exports = {
     setAvailability: (id, availability) => {
         return new Promise((resolve, reject) => {
             conn.query('UPDATE books SET availability = ? where id = ?', [availability, id], (err, result) =>{
+                if(err) 
+                    reject(err)
+                else 
+                    resolve(result)
+            })
+        })
+    },
+    getAvailability: (id) => {
+        return new Promise((resolve, reject) => {
+            conn.query('SELECT availability FROM books WHERE id = ?', id, (err, result) =>{
                 if(err) 
                     reject(err)
                 else 

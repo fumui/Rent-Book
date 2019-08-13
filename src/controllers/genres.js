@@ -15,6 +15,12 @@ module.exports = {
             .then(result => res.json(result))
             .catch(err => console.error(err))
     },
+    getOneGenre : (req, res)=>{
+        id = req.params.id
+        modelGenres.getOneGenre(id)
+            .then(result => res.json(result))
+            .catch(err => console.error(err))
+    },
     updateGenres : (req, res) => {
         const id = req.body.id
         const data = {

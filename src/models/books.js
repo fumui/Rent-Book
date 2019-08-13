@@ -21,9 +21,32 @@ module.exports = {
             })
         })
     },
+    searchBooksByTitle: (keyword) => {
+        return new Promise((resolve, reject) => {
+            const patterns = `%${keyword}%`
+            console.log(patterns)
+            conn.query('SELECT * FROM books WHERE title LIKE ?', patterns, (err, result) =>{
+                if(err) 
+                    reject(err)
+                else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+    getOneBook: (id) => {
+        return new Promise((resolve, reject) => {
+            conn.query('SELECT * FROM books WHERE id = ?', id, (err, result) =>{
+                if(err) 
+                    reject(err)
+                else 
+                    resolve(result)
+            })
+        })
+    },
     updateBook: (id, data) => {
         return new Promise((resolve, reject) => {
-            conn.query('UPDATE books SET ? where id = ?', [data, id], (err, result) =>{
+            conn.query('UPDATE books SET ? WHERE id = ?', [data, id], (err, result) =>{
                 if(err) 
                     reject(err)
                 else 

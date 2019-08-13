@@ -20,6 +20,12 @@ module.exports = {
             .then(result => res.json(result))
             .catch(err => console.error(err))
     },
+    getOneBorrowing : (req, res)=>{
+        id = req.params.id
+        modelBorrowings.getOneBorrowing(id)
+            .then(result => res.json(result))
+            .catch(err => console.error(err))
+    },
     returningBook : (req, res) => {
         const id = req.body.id
         const data = {

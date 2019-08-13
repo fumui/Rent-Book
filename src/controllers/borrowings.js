@@ -14,6 +14,8 @@ module.exports = {
                         modelBorrowings.insertBorrowing(borrowingData),
                         modelBook.setAvailability(borrowingData.book_id, 0)
                     ])
+                }else{
+                    res.json({message : "Book not available yet!"})
                 }
             })
             .catch(err => console.error(err))

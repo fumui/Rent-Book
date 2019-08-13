@@ -14,7 +14,7 @@ module.exports = {
     getAllBook: (sort = null, availability = null, start, limit) => {
         return new Promise((resolve, reject) => {
 
-            let query = 'SELECT * FROM books '
+            let query = 'SELECT * FROM books_list '
             if(availability != null)
                 query += `WHERE availability = ${availability} `
             if(sort != null)
@@ -32,7 +32,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             const patterns = `%${keyword}%`
             console.log(patterns)
-            conn.query('SELECT * FROM books WHERE title LIKE ?', patterns, (err, result) =>{
+            conn.query('SELECT * FROM books_list WHERE title LIKE ?', patterns, (err, result) =>{
                 if(err) 
                     reject(err)
                 else {

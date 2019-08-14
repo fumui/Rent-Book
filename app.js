@@ -8,6 +8,7 @@ const logger = require('morgan')
 const bookRoute = require('./src/routes/books')
 const genreRoute = require('./src/routes/genres')
 const borrowingRoute = require('./src/routes/borrowings')
+const userRoute = require('./src/routes/users')
 
 const port = process.env.SERVER_PORT || 3000
 
@@ -21,3 +22,4 @@ app.use(bodyparser.urlencoded({extended:false}))
 app.use('/books', bookRoute)
 app.use('/genres', genreRoute)
 app.use('/borrowings', borrowingRoute)
+app.use('/users', userRoute)

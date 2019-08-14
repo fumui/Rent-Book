@@ -31,6 +31,16 @@ module.exports = {
             })
         })
     },
+    getLatestBorrowingByBookId: (id) => {
+        return new Promise((resolve, reject) => {
+            conn.query('SELECT * FROM borrowings WHERE book_id = ? AND returned_at IS NULL', id, (err, result) =>{
+                if(err) 
+                    reject(err)
+                else 
+                    resolve(result)
+            })
+        })
+    },
     returningBook: (id, data) => {
         return new Promise((resolve, reject) => {
             conn.query('UPDATE borrowings SET ? where id = ?', [data, id], (err, result) =>{

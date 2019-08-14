@@ -33,17 +33,15 @@ module.exports = {
             .catch(err => console.error(err))
     },
     returningBook : (req, res) => {
-        const id = req.body.id
         const data = {
             book_id: req.body.book_id,
             returned_at: new Date(),
         }
-
-        modelBorrowings.returningBook(id, data)
-            .then(
-                result => require('../models/books')
-                    .setAvailability(data.book_id, 1)
-            )
+        modelBorrowings.getLatestBorrowingByBookId(data.book_id)
+            .then(result => Promise.all([
+                modelBorrowings.returningBook(result[0].id, data),
+                require('../models/books').setAvailability(data.book_id, 1)
+            ]))
             .catch(err => console.error(err))
             .then(result => res.json(result))
     },

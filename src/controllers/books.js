@@ -49,7 +49,6 @@ module.exports = {
             image: req.body.image,
             date_released: req.body.date_released,
             genre_id: req.body.genre_id,
-            availability: true,
             Updated_at: new Date(),
         }
 

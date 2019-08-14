@@ -11,12 +11,21 @@ module.exports = {
             })
         })
     },
-    getAllBook: (sort = null, availability = null, start, limit) => {
+    getAllBook: (keyword = null, sort = null, availability = null, start, limit) => {
         return new Promise((resolve, reject) => {
 
             let query = 'SELECT * FROM books_list '
-            if(availability != null)
-                query += `WHERE availability = ${availability} `
+
+            const availabilityIsNotNull = availability != null 
+            const keywordIsNotNull = keyword != null 
+
+            if(availabilityIsNotNull || keywordIsNotNull){
+                query += `WHERE `
+                query += availabilityIsNotNull                     ? `availability = ${availability} `:``
+                query += availabilityIsNotNull && keywordIsNotNull ? `AND `:``
+                query += keywordIsNotNull                          ? `title LIKE '%${keyword}%' `:''
+            }
+            
             if(sort != null)
                 query += `ORDER BY ${sort} `
 
@@ -25,19 +34,6 @@ module.exports = {
                     reject(err)
                 else 
                     resolve(result)
-            })
-        })
-    },
-    searchBooksByTitle: (keyword) => {
-        return new Promise((resolve, reject) => {
-            const patterns = `%${keyword}%`
-            console.log(patterns)
-            conn.query('SELECT * FROM books_list WHERE title LIKE ?', patterns, (err, result) =>{
-                if(err) 
-                    reject(err)
-                else {
-                    resolve(result)
-                }
             })
         })
     },

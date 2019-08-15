@@ -9,7 +9,8 @@ module.exports = {
         const data = {
             username : req.body.username,
             password : hashedPasswordString,
-            email    : req.body.email
+            email    : req.body.email,
+            level    : 'regular'
         }
         modelUsers.getAllUsersWithEmailOrUsername(data.email, data.username)
             .then(result => {
@@ -32,7 +33,8 @@ module.exports = {
                     const jwt = require('jsonwebtoken');
                     const payload = {
                         id : result[0].id,
-                        email: result[0].email
+                        email: result[0].email,
+                        level : result[0].level
                     }
                     jwt.sign(payload, process.env.JWT_SECRET, (err, token)=>{
                         if(err){
@@ -42,7 +44,7 @@ module.exports = {
                     })
                 }
                 else
-                    return res.json({message:"username or password is wrong"})
+                    return res.json({message:"email or password is wrong"})
             })
             .catch(err => console.error(err))
     },
@@ -57,6 +59,7 @@ module.exports = {
                 if(decoded){
                     req.user_id = decoded.id
                     req.user_email = decoded.email
+                    req.level = decoded.level
                     next()
                 }else
                     throw new Error(decoded)
@@ -65,6 +68,12 @@ module.exports = {
                 res.sendStatus(403)
             }
         }else
+            res.sendStatus(403)
+    },
+    verifyAdminPrevilege : (req, res, next) => {
+        if(req.level == 'admin')
+            next()
+        else
             res.sendStatus(403)
     }
 }

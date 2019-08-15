@@ -5,9 +5,9 @@ const genreController = require('../controllers/genres')
 const userController = require('../controllers/users')
 
 route
-    .post('/', userController.verifyTokenMiddleware, genreController.insertGenres)
+    .post('/', userController.verifyTokenMiddleware, userController.verifyAdminPrevilege, genreController.insertGenres)
     .get('/', genreController.getAllGenres)
     .get('/:id', genreController.getOneGenre)
-    .patch('/', userController.verifyTokenMiddleware, genreController.updateGenres)
-    .delete('/', userController.verifyTokenMiddleware, genreController.deleteGenres)
+    .patch('/', userController.verifyTokenMiddleware, userController.verifyAdminPrevilege, genreController.updateGenres)
+    .delete('/', userController.verifyTokenMiddleware, userController.verifyAdminPrevilege, genreController.deleteGenres)
     module.exports = route

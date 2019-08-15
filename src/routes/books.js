@@ -5,9 +5,9 @@ const bookController = require('../controllers/books')
 const userController = require('../controllers/users')
 
 route
-    .post('/', userController.verifyTokenMiddleware, bookController.insertBook)
+    .post('/', userController.verifyTokenMiddleware, userController.verifyAdminPrevilege, bookController.insertBook)
     .get('/', bookController.getAllBook)
     .get('/:id', bookController.getOneBook)
-    .patch('/', userController.verifyTokenMiddleware, bookController.updateBook)
-    .delete('/', userController.verifyTokenMiddleware, bookController.deleteBook)
+    .patch('/', userController.verifyTokenMiddleware, userController.verifyAdminPrevilege, bookController.updateBook)
+    .delete('/', userController.verifyTokenMiddleware, userController.verifyAdminPrevilege, bookController.deleteBook)
     module.exports = route

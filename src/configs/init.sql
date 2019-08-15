@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 14, 2019 at 01:35 AM
+-- Generation Time: Aug 15, 2019 at 07:49 AM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.3
 
@@ -47,7 +47,8 @@ CREATE TABLE `books` (
 -- (See below for the actual view)
 --
 CREATE TABLE `books_list` (
-`title` varchar(100)
+`id` int(11)
+,`title` varchar(100)
 ,`description` text
 ,`image` text
 ,`date_released` date
@@ -64,9 +65,25 @@ CREATE TABLE `books_list` (
 CREATE TABLE `borrowings` (
   `id` int(11) NOT NULL,
   `book_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `borrowed_at` date NOT NULL,
   `returned_at` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `borrowings_list`
+-- (See below for the actual view)
+--
+CREATE TABLE `borrowings_list` (
+`id` int(11)
+,`book_id` int(11)
+,`title` varchar(100)
+,`username` varchar(20)
+,`borrowed_at` date
+,`returned_at` date
+);
 
 -- --------------------------------------------------------
 
@@ -79,6 +96,26 @@ CREATE TABLE `genres` (
   `name` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `email` varchar(30) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `level` enum('admin','regular') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `email`, `username`, `password`, `level`) VALUES
+(1, 'admin@gmail.com', 'admin', 'e5d9a8cad94803d2da5e570b0c7d7ba7313a675d4c889846910380670940703a', 'admin');
 
 -- --------------------------------------------------------
 
@@ -87,7 +124,16 @@ CREATE TABLE `genres` (
 --
 DROP TABLE IF EXISTS `books_list`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `books_list`  AS  select `books`.`title` AS `title`,`books`.`description` AS `description`,`books`.`image` AS `image`,`books`.`date_released` AS `date_released`,`books`.`availability` AS `availability`,`genres`.`name` AS `genre` from (`books` join `genres` on((`books`.`genre_id` = `genres`.`id`))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `books_list`  AS  select `books`.`id` AS `id`,`books`.`title` AS `title`,`books`.`description` AS `description`,`books`.`image` AS `image`,`books`.`date_released` AS `date_released`,`books`.`availability` AS `availability`,`genres`.`name` AS `genre` from (`books` join `genres` on((`books`.`genre_id` = `genres`.`id`))) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `borrowings_list`
+--
+DROP TABLE IF EXISTS `borrowings_list`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `borrowings_list`  AS  select `borrowings`.`id` AS `id`,`borrowings`.`book_id` AS `book_id`,`books`.`title` AS `title`,`users`.`username` AS `username`,`borrowings`.`borrowed_at` AS `borrowed_at`,`borrowings`.`returned_at` AS `returned_at` from ((`borrowings` join `users` on((`borrowings`.`user_id` = `users`.`id`))) join `books` on((`borrowings`.`book_id` = `books`.`id`))) ;
 
 --
 -- Indexes for dumped tables
@@ -105,12 +151,19 @@ ALTER TABLE `books`
 --
 ALTER TABLE `borrowings`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `book_id` (`book_id`);
+  ADD KEY `book_id` (`book_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `genres`
 --
 ALTER TABLE `genres`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -121,19 +174,25 @@ ALTER TABLE `genres`
 -- AUTO_INCREMENT for table `books`
 --
 ALTER TABLE `books`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `borrowings`
 --
 ALTER TABLE `borrowings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `genres`
 --
 ALTER TABLE `genres`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
@@ -149,7 +208,8 @@ ALTER TABLE `books`
 -- Constraints for table `borrowings`
 --
 ALTER TABLE `borrowings`
-  ADD CONSTRAINT `borrowings_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `books` (`id`);
+  ADD CONSTRAINT `borrowings_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `books` (`id`),
+  ADD CONSTRAINT `borrowings_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

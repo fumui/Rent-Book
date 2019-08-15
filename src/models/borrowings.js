@@ -13,7 +13,7 @@ module.exports = {
     },
     getAllBorrowing: () => {
         return new Promise((resolve, reject) => {
-            conn.query('SELECT * FROM borrowings', (err, result) =>{
+            conn.query('SELECT * FROM borrowings_list', (err, result) =>{
                 if(err) 
                     reject(err)
                 else 
@@ -23,7 +23,7 @@ module.exports = {
     },
     getOneBorrowing: (id) => {
         return new Promise((resolve, reject) => {
-            conn.query('SELECT * FROM borrowings WHERE id = ?', id, (err, result) =>{
+            conn.query('SELECT * FROM borrowings_list WHERE id = ?', id, (err, result) =>{
                 if(err) 
                     reject(err)
                 else 

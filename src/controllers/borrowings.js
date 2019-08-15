@@ -2,35 +2,25 @@ const modelBorrowings = require('../models/borrowings')
 const controllerUser = require('../controllers/users')
 module.exports = {
     insertBorrowing : (req, res)=>{
-        try{
-            const decodedToken = controllerUser.verifyToken(req)
-        }catch(err){
-            res.sendStatus(403)
+        const borrowingData = {
+            user_id: req.user_id,
+            book_id: req.body.book_id,
+            borrowed_at: new Date(),
         }
-        
-        if(decodedToken != false){
-            const borrowingData = {
-                user_id: decodedToken.id,
-                book_id: req.body.book_id,
-                borrowed_at: new Date(),
-            }
-            const modelBook = require('../models/books')
-            modelBook.getAvailability(borrowingData.book_id)
-                .then(result => {
-                    if(result[0].availability == "1"){
-                        return Promise.all([
-                            modelBorrowings.insertBorrowing(borrowingData),
-                            modelBook.setAvailability(borrowingData.book_id, 0)
-                        ])
-                    }else{
-                        res.json({message : "Book not available yet!"})
-                    }
-                })
-                .catch(err => console.error(err))
-                .then(result => res.json(result))
-        }else
-            res.sendStatus(403)
-        
+        const modelBook = require('../models/books')
+        modelBook.getAvailability(borrowingData.book_id)
+            .then(result => {
+                if(result[0].availability == "1"){
+                    return Promise.all([
+                        modelBorrowings.insertBorrowing(borrowingData),
+                        modelBook.setAvailability(borrowingData.book_id, 0)
+                    ])
+                }else{
+                    res.json({message : "Book not available yet!"})
+                }
+            })
+            .catch(err => console.error(err))
+            .then(result => res.json(result))        
     },
     getAllBorrowing : (req, res)=>{
         modelBorrowings.getAllBorrowing()

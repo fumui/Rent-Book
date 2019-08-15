@@ -13,9 +13,8 @@ module.exports = {
         }
         modelUsers.getAllUsersWithEmailOrUsername(data.email, data.username)
             .then(result => {
-                if(result.length == 0){
+                if(result.length == 0)
                     return modelUsers.registerUser(data)
-                }
                 else
                     return res.json({message : "Username or email already registered"})
             })
@@ -36,7 +35,6 @@ module.exports = {
                         email: result[0].email
                     }
                     jwt.sign(payload, process.env.JWT_SECRET, (err, token)=>{
-                        req.headers.authorization = token
                         if(err){
                             console.error(err)
                         }
@@ -51,15 +49,22 @@ module.exports = {
     verifyTokenMiddleware:(req, res, next)=>{
         const bearerHeader = req.headers['authorization']
         if(bearerHeader !== undefined){
+            const jwt = require('jsonwebtoken')
             const bearer = bearerHeader.split(' ')
-            req.token = bearer[1]
-            next()
-        }else{
+            const token = bearer[1]
+            try{
+                const decoded = jwt.verify(token, process.env.JWT_SECRET);
+                if(decoded){
+                    req.user_id = decoded.id
+                    req.user_email = decoded.email
+                    next()
+                }else
+                    throw new Error(decoded)
+            }catch(err){
+                console.error(err)
+                res.sendStatus(403)
+            }
+        }else
             res.sendStatus(403)
-        }
-    },
-    verifyToken:(req)=>{
-        const jwt = require('jsonwebtoken')
-        return jwt.verify(req.token, process.env.JWT_SECRET)
     }
 }

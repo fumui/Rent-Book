@@ -2,11 +2,12 @@ const express = require('express')
 const route = express.Router()
 
 const bookController = require('../controllers/books')
+const userController = require('../controllers/users')
 
 route
-    .post('/', bookController.insertBook)
+    .post('/', userController.verifyTokenMiddleware, bookController.insertBook)
     .get('/', bookController.getAllBook)
     .get('/:id', bookController.getOneBook)
-    .patch('/', bookController.updateBook)
-    .delete('/', bookController.deleteBook)
+    .patch('/', userController.verifyTokenMiddleware, bookController.updateBook)
+    .delete('/', userController.verifyTokenMiddleware, bookController.deleteBook)
     module.exports = route

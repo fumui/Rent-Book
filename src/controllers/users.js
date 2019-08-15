@@ -4,18 +4,33 @@ const modelUsers = require('../models/users')
 module.exports = {
     registerUser : (req, res)=>{
         const crypto = require('crypto-js')
-        const hashedPassword = crypto.SHA256(req.body.password)
-        const hashedPasswordString = hashedPassword.toString(crypto.enc.Hex)
-        const data = {
+
+        const Joi = require('@hapi/joi');
+        const userData = {
             username : req.body.username,
-            password : hashedPasswordString,
+            password : req.body.password,
             email    : req.body.email,
             level    : 'regular'
         }
-        modelUsers.getAllUsersWithEmailOrUsername(data.email, data.username)
+        const schema = Joi.object().keys({
+            username: Joi.string().alphanum().min(3).max(30).required(),
+            password: Joi.string().min(8).required(),
+            email: Joi.string().email({ minDomainSegments: 2 }),
+            level : Joi.string()
+        })
+        const result = Joi.validate(userData,schema)
+        if(result.error != null){
+            res.json({message: "user data not valid"})
+            return
+        }
+            
+        const hashedPassword = crypto.SHA256(userData.password)
+        userData.password = hashedPassword.toString(crypto.enc.Hex)
+        
+        modelUsers.getAllUsersWithEmailOrUsername(userData.email, userData.username)
             .then(result => {
                 if(result.length == 0)
-                    return modelUsers.registerUser(data)
+                    return modelUsers.registerUser(userData)
                 else
                     return res.json({message : "Username or email already registered"})
             })

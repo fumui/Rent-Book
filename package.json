@@ -4,6 +4,7 @@
   "description": "App for renting book ",
   "main": "app.js",
   "dependencies": {
+    "@hapi/joi": "^15.1.0",
     "body-parser": "^1.19.0",
     "crypto-js": "^3.1.9-1",
     "dotenv": "^8.0.0",

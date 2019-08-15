@@ -11,9 +11,26 @@ module.exports = {
             })
         })
     },
-    getAllBorrowing: () => {
+    getAllBorrowing: (keyword = null, sort = null, bookStatus = null, start, limit) => {
         return new Promise((resolve, reject) => {
-            conn.query('SELECT * FROM borrowings_list', (err, result) =>{
+
+            let query = 'SELECT * FROM borrowings_list '
+
+            const bookStatusIsNotNull = bookStatus != null 
+            const keywordIsNotNull = keyword != null 
+
+            if(bookStatusIsNotNull || keywordIsNotNull){
+                query += `WHERE `
+                query += bookStatusIsNotNull                            ? `returned_at IS `:``
+                query += bookStatusIsNotNull && bookStatus == 'returned'? 'NOT NULL ':'NULL '
+                query += bookStatusIsNotNull && keywordIsNotNull        ? `AND `:``
+                query += keywordIsNotNull                               ? `title LIKE '%${keyword}%' `:''
+            }
+            
+            if(sort != null)
+                query += `ORDER BY ${sort} `
+            console.log(query)
+            conn.query(query +`LIMIT ${start}, ${limit}`, (err, result) =>{
                 if(err) 
                     reject(err)
                 else 

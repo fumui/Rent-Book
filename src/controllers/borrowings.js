@@ -23,7 +23,14 @@ module.exports = {
             .then(result => res.json(result))        
     },
     getAllBorrowing : (req, res)=>{
-        modelBorrowings.getAllBorrowing()
+        const keyword = req.query.search;
+        const sort = req.query.sortby;
+        const bookStatus = req.query.book_status;
+        const page = req.query.page || 1
+        const limit = req.query.limit || 10
+        const start = (Number(page) - 1) * limit 
+        
+        modelBorrowings.getAllBorrowing(keyword, sort, bookStatus, start, limit)
             .then(result => res.json(result))
             .catch(err => console.error(err))
     },

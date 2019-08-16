@@ -31,8 +31,8 @@ Back-End of an App for borrowing books made using Node.js. This app use MVC styl
 #### GET Request
 
  - "host/books/" => display all books, with default pagination {page:1, limit:10}. Query params:
-	- sortby -> name of column you want to sort. 
-	- availability -> displaying list of available books if it set to 1, or unavailable books if set to 0
+	- sortby -> its value is name of column you want to sort. 
+	- availability -> displaying list of available books if it's value set to 1, or unavailable books if set to 0
 	- page -> page to display (default 1)
 	- limit -> number of books displayed in a page (default 10)
 	- search -> display all books with title that contains the keyword.

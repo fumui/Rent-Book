@@ -13,11 +13,11 @@ const userRoute = require('./src/routes/users')
 const port = process.env.SERVER_PORT || 3000
 
 app.listen(port, () => {
-    console.log(`Server is running at port ${port}`)
+  console.log(`Server is running at port ${port}`)
 })
 app.use(logger('dev'))
 app.use(bodyparser.json())
-app.use(bodyparser.urlencoded({extended:false}))
+app.use(bodyparser.urlencoded({ extended: false }))
 
 app.use('/books', bookRoute)
 app.use('/genres', genreRoute)

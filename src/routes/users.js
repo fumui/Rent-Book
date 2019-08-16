@@ -1,14 +1,14 @@
 const express = require('express')
 const route = express.Router()
 
-const userController = require('../controllers/users')
 const auth = require('../middlewares/auth')
+const userController = require('../controllers/users')
 
 route
-    .get('/', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, userController.getAllUsers)
-    .get('/:id', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, userController.getOneUser)
-    .post('/register', userController.registerUser)
-    .post('/register/admin', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, userController.registerAdmin)
-    .post('/login', userController.login)
+  .get('/', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, userController.getAllUsers)
+  .get('/:id', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, userController.getOneUser)
+  .post('/register/admin', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, userController.registerAdmin)
+  .post('/register', userController.registerUser)
+  .post('/login', userController.login)
 
 module.exports = route

@@ -33,7 +33,7 @@ module.exports = {
     },
     getAllUsers: (keyword = null, sort = null, start, limit) => {
         return new Promise((resolve, reject) => {
-            let query = `SELECT * FROM users `;
+            let query = `SELECT id, username, email, level FROM users `;
 
             query += keyword != null ? `WHERE usename LIKE %${keyword}% `:''
             query += sort    != null ? `ORDER BY ${sort} `:''
@@ -48,7 +48,7 @@ module.exports = {
     },
     getOneUser: (id) => {
         return new Promise((resolve, reject) => {
-            conn.query('SELECT * FROM users WHERE id = ?', id, (err, result) =>{
+            conn.query('SELECT id, username, email, level FROM users WHERE id = ?', id, (err, result) =>{
                 if(err) 
                     reject(err)
                 else 

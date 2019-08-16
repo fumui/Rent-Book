@@ -43,6 +43,31 @@ module.exports = {
             .catch(err => console.error(err))
             .then(result => res.json(result))
     },
+    registerAdmin : (req, res)=>{
+
+        const userData = {
+            username : req.body.username,
+            password : req.body.password,
+            email    : req.body.email,
+            level    : 'admin'
+        }
+
+        if(!isFormValid(userData)){
+            return res.json({message: "user data not valid"}) 
+        }
+        
+        userData.password = hash(userData.password)
+        
+        modelUsers.getAllUsersWithEmailOrUsername(userData.email, userData.username)
+            .then(result => {
+                if(result.length == 0)
+                    return modelUsers.registerUser(userData)
+                else
+                    return res.json({message : "Username or email already registered"})
+            })
+            .catch(err => console.error(err))
+            .then(result => res.json(result))
+    },
     login : (req, res)=>{
         const hashedPassword = hash(req.body.password)
         const email = req.body.email

@@ -1,5 +1,4 @@
 const modelBorrowings = require('../models/borrowings')
-const controllerUser = require('../controllers/users')
 module.exports = {
     insertBorrowing : (req, res)=>{
         const borrowingData = {
@@ -19,7 +18,10 @@ module.exports = {
                     res.json({message : "Book not available yet!"})
                 }
             })
-            .catch(err => console.error(err))
+            .catch(err => {
+                console.error(err)
+                return res.sendStatus(500)
+            })
             .then(result => res.json(result))        
     },
     getAllBorrowing : (req, res)=>{
@@ -31,14 +33,26 @@ module.exports = {
         const start = (Number(page) - 1) * limit 
         
         modelBorrowings.getAllBorrowing(keyword, sort, bookStatus, start, limit)
-            .then(result => res.json(result))
-            .catch(err => console.error(err))
+            .then(result => {
+                if(result.length != 0 ) return res.json(result)
+                else return res.json({message:"Borrowing data not found"})
+            })
+            .catch(err => {
+                console.error(err)
+                return res.sendStatus(500)
+            })
     },
     getOneBorrowing : (req, res)=>{
         id = req.params.id
         modelBorrowings.getOneBorrowing(id)
-            .then(result => res.json(result))
-            .catch(err => console.error(err))
+            .then(result => {
+                if(result.length != 0 ) return res.json(result)
+                else return res.json({message:"Borrowing data not found"})
+            })
+            .catch(err => {
+                console.error(err)
+                return res.sendStatus(500)
+            })
     },
     returningBook : (req, res) => {
         const data = {
@@ -50,7 +64,10 @@ module.exports = {
                 modelBorrowings.returningBook(result[0].id, data),
                 require('../models/books').setAvailability(data.book_id, 1)
             ]))
-            .catch(err => console.error(err))
+            .catch(err => {
+                console.error(err)
+                return res.sendStatus(500)
+            })
             .then(result => res.json(result))
     },
     deleteBorrowing : (req, res) => {
@@ -58,6 +75,9 @@ module.exports = {
 
         modelBorrowings.deleteBorrowing(id)
             .then(result => res.json(result))
-            .catch(err => console.error(err))
+            .catch(err => {
+                console.error(err)
+                return res.sendStatus(500)
+            })
     }
 }

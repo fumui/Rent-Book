@@ -26,8 +26,7 @@ module.exports = {
                 query += keywordIsNotNull                          ? `title LIKE '%${keyword}%' `:''
             }
             
-            if(sort != null)
-                query += `ORDER BY ${sort} `
+            query += sort != null ? `ORDER BY ${sort} `:''
 
             conn.query(query +`LIMIT ${start}, ${limit}`, (err, result) =>{
                 if(err) 

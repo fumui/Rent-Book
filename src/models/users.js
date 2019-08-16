@@ -30,5 +30,30 @@ module.exports = {
                     resolve(result)
             })
         })
-    }
+    },
+    getAllUsers: (keyword = null, sort = null, start, limit) => {
+        return new Promise((resolve, reject) => {
+            let query = `SELECT * FROM users `;
+
+            query += keyword != null ? `WHERE usename LIKE %${keyword}% `:''
+            query += sort    != null ? `ORDER BY ${sort} `:''
+            
+            conn.query(`${query}LIMIT ${start}, ${limit}`, (err, result) =>{
+                if(err) 
+                    reject(err)
+                else 
+                    resolve(result)
+            })
+        })
+    },
+    getOneUser: (id) => {
+        return new Promise((resolve, reject) => {
+            conn.query('SELECT * FROM users WHERE id = ?', id, (err, result) =>{
+                if(err) 
+                    reject(err)
+                else 
+                    resolve(result)
+            })
+        })
+    },
 }

@@ -15,7 +15,10 @@ module.exports = {
 
         modelBooks.insertBook(data)
             .then(result => res.json(result))
-            .catch(err => console.error(err))
+            .catch(err => {
+                console.error(err)
+                return res.sendStatus(500)
+            })
     },
     getAllBook : (req, res)=>{
         const keyword = req.query.search;
@@ -26,15 +29,27 @@ module.exports = {
         const start = (Number(page) - 1) * limit 
         
         modelBooks.getAllBook(keyword, sort, availability, start, limit)
-            .then(result => res.json(result))
-            .catch(err => console.error(err))
+            .then(result => {
+                if(result.length != 0 ) return res.json(result)
+                else return res.json({message:"Book not found"})
+            })
+            .catch(err => {
+                console.error(err)
+                return res.sendStatus(500)
+            })
         
     },
     getOneBook : (req, res)=>{
         id = req.params.id
         modelBooks.getOneBook(id)
-            .then(result => res.json(result))
-            .catch(err => console.error(err))
+            .then(result => {
+                if(result.length != 0 ) return res.json(result)
+                else return res.json({message:"Book not found"})
+            })
+            .catch(err => {
+                console.error(err)
+                return res.sendStatus(500)
+            })
     },
     updateBook : (req, res) => {
         const id = req.body.id
@@ -49,13 +64,19 @@ module.exports = {
 
         modelBooks.updateBook(id, data)
             .then(result => res.json(result))
-            .catch(err => console.error(err))
+            .catch(err => {
+                console.error(err)
+                return res.sendStatus(500)
+            })
     },
     deleteBook : (req, res) => {
         const id = req.body.id
 
         modelBooks.deleteBook(id)
             .then(result => res.json(result))
-            .catch(err => console.error(err))
+            .catch(err => {
+                console.error(err)
+                return res.sendStatus(500)
+            })
     }
 }

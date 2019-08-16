@@ -2,12 +2,13 @@ const express = require('express')
 const route = express.Router()
 
 const borrowingController = require('../controllers/borrowings')
-const userController = require('../controllers/users')
+const auth = require('../middlewares/auth')
 
 route
-    .post('/', userController.verifyTokenMiddleware, borrowingController.insertBorrowing)
-    .get('/', userController.verifyTokenMiddleware, borrowingController.getAllBorrowing)
-    .get('/:id', userController.verifyTokenMiddleware, borrowingController.getOneBorrowing)
-    .patch('/', userController.verifyTokenMiddleware, borrowingController.returningBook)
-    .delete('/', userController.verifyTokenMiddleware, borrowingController.deleteBorrowing)
-    module.exports = route
+    .post('/', auth.verifyTokenMiddleware, borrowingController.insertBorrowing)
+    .get('/', auth.verifyTokenMiddleware, borrowingController.getAllBorrowing)
+    .get('/:id', auth.verifyTokenMiddleware, borrowingController.getOneBorrowing)
+    .patch('/', auth.verifyTokenMiddleware, borrowingController.returningBook)
+    .delete('/', auth.verifyTokenMiddleware, borrowingController.deleteBorrowing)
+    
+module.exports = route

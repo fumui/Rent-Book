@@ -1,31 +1,37 @@
 require('dotenv').config()
 const modelUsers = require('../models/users')
-
+isFormValid = (data)=>{
+    const Joi = require('@hapi/joi');
+    const schema = Joi.object().keys({
+        username: Joi.string().alphanum().min(3).max(30).required(),
+        password: Joi.string().min(8).required(),
+        email: Joi.string().email({ minDomainSegments: 2 }),
+        level : Joi.string()
+    })
+    const result = Joi.validate(data,schema)
+    if(result.error == null) return true
+    else return false
+}
+hash = (string)=>{
+    const crypto = require('crypto-js')
+    return crypto.SHA256(string)
+                 .toString(crypto.enc.Hex)
+};
 module.exports = {
     registerUser : (req, res)=>{
-        const crypto = require('crypto-js')
 
-        const Joi = require('@hapi/joi');
         const userData = {
             username : req.body.username,
             password : req.body.password,
             email    : req.body.email,
             level    : 'regular'
         }
-        const schema = Joi.object().keys({
-            username: Joi.string().alphanum().min(3).max(30).required(),
-            password: Joi.string().min(8).required(),
-            email: Joi.string().email({ minDomainSegments: 2 }),
-            level : Joi.string()
-        })
-        const result = Joi.validate(userData,schema)
-        if(result.error != null){
-            res.json({message: "user data not valid"})
-            return
+
+        if(!isFormValid(userData)){
+            return res.json({message: "user data not valid"}) 
         }
-            
-        const hashedPassword = crypto.SHA256(userData.password)
-        userData.password = hashedPassword.toString(crypto.enc.Hex)
+        
+        userData.password = hash(userData.password)
         
         modelUsers.getAllUsersWithEmailOrUsername(userData.email, userData.username)
             .then(result => {
@@ -38,11 +44,9 @@ module.exports = {
             .then(result => res.json(result))
     },
     login : (req, res)=>{
-        const crypto = require('crypto-js')
-        const hashedPassword = crypto.SHA256(req.body.password)
-        const hashedPasswordString = hashedPassword.toString(crypto.enc.Hex)
+        const hashedPassword = hash(req.body.password)
         const email = req.body.email
-        modelUsers.login(email, hashedPasswordString)
+        modelUsers.login(email, hashedPassword)
             .then(result => {
                 if(result.length != 0){
                     const jwt = require('jsonwebtoken');
@@ -63,32 +67,36 @@ module.exports = {
             })
             .catch(err => console.error(err))
     },
-    verifyTokenMiddleware:(req, res, next)=>{
-        const bearerHeader = req.headers['authorization']
-        if(bearerHeader !== undefined){
-            const jwt = require('jsonwebtoken')
-            const bearer = bearerHeader.split(' ')
-            const token = bearer[1]
-            try{
-                const decoded = jwt.verify(token, process.env.JWT_SECRET);
-                if(decoded){
-                    req.user_id = decoded.id
-                    req.user_email = decoded.email
-                    req.level = decoded.level
-                    next()
-                }else
-                    throw new Error(decoded)
-            }catch(err){
+    getAllUsers : (req, res)=>{
+        const keyword = req.query.search;
+        const sort = req.query.sortby;
+        const page = req.query.page || 1
+        const limit = req.query.limit || 10
+        const start = (Number(page) - 1) * limit 
+        
+        modelUsers.getAllUsers(keyword, sort, start, limit)
+            .then(result => {
+                if(result.length != 0 ) return res.json(result)
+                else return res.json({message:"User not found"})
+            })
+            .catch(err => {
                 console.error(err)
-                res.sendStatus(403)
-            }
-        }else
-            res.sendStatus(403)
+                return res.sendStatus(500)
+            })
+        
     },
-    verifyAdminPrevilege : (req, res, next) => {
-        if(req.level == 'admin')
-            next()
-        else
-            res.sendStatus(403)
-    }
+    getOneUser : (req, res)=>{
+        const id = req.params.id;
+        
+        modelUsers.getOneUser(id)
+            .then(result => {
+                if(result.length != 0 ) return res.json(result)
+                else return res.json({message:"User not found"})
+            })
+            .catch(err => {
+                console.error(err)
+                return res.sendStatus(500)
+            })
+        
+    },
 }

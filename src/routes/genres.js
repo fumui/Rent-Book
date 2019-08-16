@@ -2,12 +2,13 @@ const express = require('express')
 const route = express.Router()
 
 const genreController = require('../controllers/genres')
-const userController = require('../controllers/users')
+const auth = require('../middlewares/auth')
 
 route
-    .post('/', userController.verifyTokenMiddleware, userController.verifyAdminPrevilege, genreController.insertGenres)
+    .post('/', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, genreController.insertGenres)
     .get('/', genreController.getAllGenres)
     .get('/:id', genreController.getOneGenre)
-    .patch('/', userController.verifyTokenMiddleware, userController.verifyAdminPrevilege, genreController.updateGenres)
-    .delete('/', userController.verifyTokenMiddleware, userController.verifyAdminPrevilege, genreController.deleteGenres)
-    module.exports = route
+    .patch('/', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, genreController.updateGenres)
+    .delete('/', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, genreController.deleteGenres)
+    
+module.exports = route

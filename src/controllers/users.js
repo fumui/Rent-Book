@@ -79,7 +79,7 @@ module.exports = {
             if (err) {
               console.error(err)
             }
-            res.json(token)
+            res.json({ token: `Bearer ${token}` })
           })
         } else { return res.json({ message: 'email or password is wrong' }) }
       })

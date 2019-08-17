@@ -10,23 +10,24 @@ module.exports = {
   },
   getAllBorrowing: (keyword = null, sort = null, bookStatus = null, start, limit) => {
     return new Promise((resolve, reject) => {
-      let query = 'SELECT * FROM borrowings_list '
+      let query = 'SELECT * FROM `borrowings_list` '
 
       const bookStatusIsNotNull = bookStatus != null
       const keywordIsNotNull = keyword != null
 
       if (bookStatusIsNotNull || keywordIsNotNull) {
         query += `WHERE `
-        query += bookStatusIsNotNull ? `returned_at IS ` : ``
-        query += bookStatusIsNotNull && bookStatus === 'returned' ? 'NOT NULL ' : 'NULL '
-        query += bookStatusIsNotNull && keywordIsNotNull ? `AND ` : ``
         query += keywordIsNotNull ? `title LIKE '%${keyword}%' ` : ''
+        query += bookStatusIsNotNull && keywordIsNotNull ? `AND ` : ``
+        query += bookStatusIsNotNull ? `returned_at IS ` : ``
+        query += bookStatusIsNotNull && bookStatus == 'returned' ? 'NOT NULL ' : ''
+        query += bookStatusIsNotNull && bookStatus == 'borrowed' ? 'NULL ' : ''
       }
 
       if (sort != null) { query += `ORDER BY ${sort} ` }
-      console.log(query)
       conn.query(query + `LIMIT ${start}, ${limit}`, (err, result) => {
-        if (err) { reject(err) } else { resolve(result) }
+        if (err) reject(err)
+        else resolve(result)
       })
     })
   },

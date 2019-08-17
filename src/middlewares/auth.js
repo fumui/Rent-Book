@@ -21,6 +21,6 @@ module.exports = {
     } else { res.sendStatus(403) }
   },
   verifyAdminPrevilege: (req, res, next) => {
-    if (req.level === 'admin') { next() } else { res.sendStatus(403) }
+    if (req.level == 'admin') { next() } else { res.sendStatus(403) }
   }
 }

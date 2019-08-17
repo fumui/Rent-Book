@@ -9,7 +9,7 @@ module.exports = {
     const modelBook = require('../models/books')
     modelBook.getAvailability(borrowingData.book_id)
       .then(result => {
-        if (result[0].availability === '1') {
+        if (result[0].availability === 1) {
           return Promise.all([
             modelBorrowings.insertBorrowing(borrowingData),
             modelBook.setAvailability(borrowingData.book_id, 0)
@@ -34,8 +34,10 @@ module.exports = {
 
     modelBorrowings.getAllBorrowing(keyword, sort, bookStatus, start, limit)
       .then(result => {
-        if (result.length !== 0) return res.json(result)
-        else return res.json({ message: 'Borrowing data not found' })
+        console.log(result)
+        return res.json(result)
+        // if (result.length !== 0) return res.json(result)
+        // else return res.json({ message: 'Borrowing data not found' })
       })
       .catch(err => {
         console.error(err)
@@ -46,7 +48,7 @@ module.exports = {
     const id = req.params.id
     modelBorrowings.getOneBorrowing(id)
       .then(result => {
-        if (result.length !== 0) return res.json(result)
+        if (result.length != 0) return res.json(result)
         else return res.json({ message: 'Borrowing data not found' })
       })
       .catch(err => {

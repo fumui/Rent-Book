@@ -34,10 +34,8 @@ module.exports = {
 
     modelBorrowings.getAllBorrowing(keyword, sort, bookStatus, start, limit)
       .then(result => {
-        console.log(result)
-        return res.json(result)
-        // if (result.length !== 0) return res.json(result)
-        // else return res.json({ message: 'Borrowing data not found' })
+        if (result.length !== 0) return res.json(result)
+        else return res.json({ message: 'Borrowing data not found' })
       })
       .catch(err => {
         console.error(err)
@@ -48,7 +46,7 @@ module.exports = {
     const id = req.params.id
     modelBorrowings.getOneBorrowing(id)
       .then(result => {
-        if (result.length != 0) return res.json(result)
+        if (result.length !== 0) return res.json(result)
         else return res.json({ message: 'Borrowing data not found' })
       })
       .catch(err => {
@@ -62,10 +60,16 @@ module.exports = {
       returned_at: new Date()
     }
     modelBorrowings.getLatestBorrowingByBookId(data.book_id)
-      .then(result => Promise.all([
-        modelBorrowings.returningBook(result[0].id, data),
-        require('../models/books').setAvailability(data.book_id, 1)
-      ]))
+      .then(result => {
+        if (result.length !== 0) {
+          return Promise.all([
+            modelBorrowings.returningBook(result[0].id, data),
+            require('../models/books').setAvailability(data.book_id, 1)
+          ])
+        } else {
+          return res.json({ message: 'Book already been returned' })
+        }
+      })
       .catch(err => {
         console.error(err)
         return res.sendStatus(500)

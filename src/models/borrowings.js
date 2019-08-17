@@ -20,8 +20,8 @@ module.exports = {
         query += keywordIsNotNull ? `title LIKE '%${keyword}%' ` : ''
         query += bookStatusIsNotNull && keywordIsNotNull ? `AND ` : ``
         query += bookStatusIsNotNull ? `returned_at IS ` : ``
-        query += bookStatusIsNotNull && bookStatus == 'returned' ? 'NOT NULL ' : ''
-        query += bookStatusIsNotNull && bookStatus == 'borrowed' ? 'NULL ' : ''
+        query += bookStatusIsNotNull && bookStatus === 'returned' ? 'NOT NULL ' : ''
+        query += bookStatusIsNotNull && bookStatus === 'borrowed' ? 'NULL ' : ''
       }
 
       if (sort != null) { query += `ORDER BY ${sort} ` }

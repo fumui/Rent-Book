@@ -1,5 +1,7 @@
 require('dotenv').config()
 const modelUsers = require('../models/users')
+const responses = require('../responses')
+
 const isFormValid = (data) => {
   const Joi = require('@hapi/joi')
   const schema = Joi.object().keys({
@@ -29,17 +31,21 @@ module.exports = {
     }
 
     if (!isFormValid(userData)) {
-      return res.json({ message: 'user data not valid' })
+      return responses.dataManipulationResponse(res, 200, 'Data is not valid')
     }
 
     userData.password = hash(userData.password)
 
     modelUsers.getAllUsersWithEmailOrUsername(userData.email, userData.username)
       .then(result => {
-        if (result.length === 0) { return modelUsers.registerUser(userData) } else { return res.json({ message: 'Username or email already registered' }) }
+        if (result.length === 0) return modelUsers.registerUser(userData)
+        else return responses.dataManipulationResponse(res, 200, 'Username or email already registered')
       })
-      .catch(err => console.error(err))
-      .then(result => res.json(result))
+      .then(result => responses.dataManipulationResponse(res, 200, 'Success registering new user', { id: result[0].insertId, username: userData.username }))
+      .catch(err => {
+        console.error(err)
+        return responses.dataManipulationResponse(res, 200, 'Failed registering user', err)
+      })
   },
   registerAdmin: (req, res) => {
     const userData = {
@@ -57,10 +63,14 @@ module.exports = {
 
     modelUsers.getAllUsersWithEmailOrUsername(userData.email, userData.username)
       .then(result => {
-        if (result.length === 0) { return modelUsers.registerUser(userData) } else { return res.json({ message: 'Username or email already registered' }) }
+        if (result.length === 0) return modelUsers.registerUser(userData)
+        else return responses.dataManipulationResponse(res, 200, 'Username or email already registered')
       })
-      .catch(err => console.error(err))
-      .then(result => res.json(result))
+      .then(result => responses.dataManipulationResponse(res, 201, 'Success registering new user', { id: result[0].insertId, username: userData.username }))
+      .catch(err => {
+        console.error(err)
+        return responses.dataManipulationResponse(res, 200, 'Failed registering user', err)
+      })
   },
   login: (req, res) => {
     const email = req.body.email
@@ -81,9 +91,12 @@ module.exports = {
             }
             res.json({ token: `Bearer ${token}` })
           })
-        } else { return res.json({ message: 'email or password is wrong' }) }
+        } else { return responses.dataManipulationResponse(res, 200, 'Username or email is wrong') }
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        console.error(err)
+        return responses.dataManipulationResponse(res, 500, err)
+      })
   },
   getAllUsers: (req, res) => {
     const keyword = req.query.search
@@ -94,12 +107,12 @@ module.exports = {
 
     modelUsers.getAllUsers(keyword, sort, start, limit)
       .then(result => {
-        if (result.length !== 0) return res.json(result)
-        else return res.json({ message: 'User not found' })
+        if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length, null)
+        else return responses.getDataResponse(res, 200, null, null, null, 'No users found')
       })
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses.getDataResponse(res, 500, err)
       })
   },
   getOneUser: (req, res) => {
@@ -107,12 +120,12 @@ module.exports = {
 
     modelUsers.getOneUser(id)
       .then(result => {
-        if (result.length !== 0) return res.json(result)
-        else return res.json({ message: 'User not found' })
+        if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length, null)
+        else return responses.getDataResponse(res, 200, null, null, null, 'No users found')
       })
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses.getDataResponse(res, 500, err)
       })
   }
 }

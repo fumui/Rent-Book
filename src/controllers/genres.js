@@ -1,4 +1,5 @@
 const modelGenres = require('../models/genres')
+const responses = require('../responses')
 
 module.exports = {
   insertGenres: (req, res) => {
@@ -7,33 +8,36 @@ module.exports = {
     }
 
     modelGenres.insertGenre(data)
-      .then(result => res.json(result))
+      .then(result => {
+        data.id = result.insertId
+        return responses.dataManipulationResponse(res, 201, 'Success adding genre', data)
+      })
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses.dataManipulationResponse(res, 500, 'Failed adding genre', err)
       })
   },
   getAllGenres: (req, res) => {
     modelGenres.getAllGenre()
       .then(result => {
-        if (result.length !== 0) return res.json(result)
-        else return res.json({ message: 'Genre not found' })
+        if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
+        else return responses.getDataResponse(res, 200, 0, 0, null, 'Genre not found')
       })
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses.getDataResponse(res, 500, err)
       })
   },
   getOneGenre: (req, res) => {
     const id = req.params.id
     modelGenres.getOneGenre(id)
       .then(result => {
-        if (result.length !== 0) return res.json(result)
-        else return res.json({ message: 'Genre not found' })
+        if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
+        else return responses.getDataResponse(res, 200, null, null, null, 'Genre not found')
       })
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses.getDataResponse(res, 500, err)
       })
   },
   updateGenres: (req, res) => {
@@ -43,20 +47,27 @@ module.exports = {
     }
 
     modelGenres.updateGenre(id, data)
-      .then(result => res.json(result))
+      .then(result => {
+        data.id = id
+        if (result.affectedRows !== 0) return responses.dataManipulationResponse(res, 200, 'Success updating data', data)
+        else return responses.dataManipulationResponse(res, 200, 'Failed to update', data)
+      })
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses.dataManipulationResponse(res, 500, err)
       })
   },
   deleteGenres: (req, res) => {
     const id = req.params.id
 
     modelGenres.deleteGenre(id)
-      .then(result => res.json(result))
+      .then(result => {
+        if (result.affectedRows !== 0) return responses.dataManipulationResponse(res, 200, 'Success deleting data', { id })
+        else return responses.dataManipulationResponse(res, 200, 'Failed to delete', { id })
+      })
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses.dataManipulationResponse(res, 500, err)
       })
   }
 }

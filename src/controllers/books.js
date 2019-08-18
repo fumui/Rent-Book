@@ -1,4 +1,5 @@
 const modelBooks = require('../models/books')
+const responses = require('../responses')
 
 module.exports = {
   insertBook: (req, res) => {
@@ -14,10 +15,13 @@ module.exports = {
     }
 
     modelBooks.insertBook(data)
-      .then(result => res.json(result))
+      .then(result => {
+        data.id = result.insertId
+        return responses.dataManipulationResponse(res, 201, 'Success inserting data', data)
+      })
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses.dataManipulationResponse(res, 500, 'Failed to insert data', err)
       })
   },
   getAllBook: (req, res) => {
@@ -30,24 +34,24 @@ module.exports = {
 
     modelBooks.getAllBook(keyword, sort, availability, start, limit)
       .then(result => {
-        if (result.length !== 0) return res.json(result)
-        else return res.json({ message: 'Book not found' })
+        if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length, page)
+        else return responses.getDataResponse(res, 200, null, null, null, 'Book not found')
       })
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses.getDataResponse(res, 500, err)
       })
   },
   getOneBook: (req, res) => {
     const id = req.params.id
     modelBooks.getOneBook(id)
       .then(result => {
-        if (result.length !== 0) return res.json(result)
-        else return res.json({ message: 'Book not found' })
+        if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
+        else return responses.getDataResponse(res, 200, null, null, null, 'Book not found')
       })
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses.getDataResponse(res, 500, err)
       })
   },
   updateBook: (req, res) => {
@@ -62,20 +66,28 @@ module.exports = {
     }
 
     modelBooks.updateBook(id, data)
-      .then(result => res.json(result))
+      .then(result => {
+        data.id = id
+        if (result.affectedRows !== 0) return responses.dataManipulationResponse(res, 200, 'Success updating data', data)
+        else return responses.dataManipulationResponse(res, 200, 'Failed to update', data)
+      })
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses.getDataResponse(res, 500, err)
       })
   },
   deleteBook: (req, res) => {
     const id = req.params.id
 
     modelBooks.deleteBook(id)
-      .then(result => res.json(result))
+      .then(result => {
+        result.id = id
+        if (result.affectedRows !== 0) return responses.dataManipulationResponse(res, 200, 'Success deleting data', result)
+        else return responses.dataManipulationResponse(res, 200, 'Failed to delete', result)
+      })
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses.getDataResponse(res, 500, err)
       })
   }
 }

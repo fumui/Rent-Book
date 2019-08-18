@@ -1,4 +1,7 @@
 const modelBorrowings = require('../models/borrowings')
+const responses = require('../responses')
+const modelBook = require('../models/books')
+
 module.exports = {
   insertBorrowing: (req, res) => {
     const borrowingData = {
@@ -6,7 +9,6 @@ module.exports = {
       book_id: req.body.book_id,
       borrowed_at: new Date()
     }
-    const modelBook = require('../models/books')
     modelBook.getAvailability(borrowingData.book_id)
       .then(result => {
         if (result[0].availability === 1) {
@@ -15,14 +17,17 @@ module.exports = {
             modelBook.setAvailability(borrowingData.book_id, 0)
           ])
         } else {
-          res.json({ message: 'Book not available yet!' })
+          return responses.dataManipulationResponse(res, 200, 'Book is not yet available')
         }
+      })
+      .then(result => {
+        borrowingData.id = result[0].insertId
+        return responses.dataManipulationResponse(res, 201, 'Success borrowing book', borrowingData)
       })
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses.dataManipulationResponse(res, 500, 'Failed to borrow book', err)
       })
-      .then(result => res.json(result))
   },
   getAllBorrowing: (req, res) => {
     const keyword = req.query.search
@@ -34,24 +39,24 @@ module.exports = {
 
     modelBorrowings.getAllBorrowing(keyword, sort, bookStatus, start, limit)
       .then(result => {
-        if (result.length !== 0) return res.json(result)
-        else return res.json({ message: 'Borrowing data not found' })
+        if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length, page)
+        else return responses.getDataResponse(res, 200, result, result.length, page, 'Borrowing data not found')
       })
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses.getDataResponse(res, 500, err)
       })
   },
   getOneBorrowing: (req, res) => {
     const id = req.params.id
     modelBorrowings.getOneBorrowing(id)
       .then(result => {
-        if (result.length !== 0) return res.json(result)
-        else return res.json({ message: 'Borrowing data not found' })
+        if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
+        else return responses.getDataResponse(res, 200, null, null, null, 'Borrowing data not found')
       })
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses(res, 500, err)
       })
   },
   returningBook: (req, res) => {
@@ -64,26 +69,26 @@ module.exports = {
         if (result.length !== 0) {
           return Promise.all([
             modelBorrowings.returningBook(result[0].id, data),
-            require('../models/books').setAvailability(data.book_id, 1)
+            modelBook.setAvailability(data.book_id, 1)
           ])
         } else {
-          return res.json({ message: 'Book already been returned' })
+          return responses.dataManipulationResponse(res, 200, 'Book has already been returned')
         }
       })
+      .then(result => responses.dataManipulationResponse(res, 200, 'Success returning book', data))
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses.dataManipulationResponse(res, 500, 'Failed to return book', err)
       })
-      .then(result => res.json(result))
   },
   deleteBorrowing: (req, res) => {
     const id = req.params.id
 
     modelBorrowings.deleteBorrowing(id)
-      .then(result => res.json(result))
+      .then(result => responses.dataManipulationResponse(res, 200, 'Success deleting borrowing data', result))
       .catch(err => {
         console.error(err)
-        return res.sendStatus(500)
+        return responses.dataManipulationResponse(res, 200, 'Failed to delete borrowing data', err)
       })
   }
 }

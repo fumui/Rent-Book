@@ -8,7 +8,7 @@ route
   .post('/', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, genreController.insertGenres)
   .get('/', genreController.getAllGenres)
   .get('/:id', genreController.getOneGenre)
-  .patch('/', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, genreController.updateGenres)
-  .delete('/', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, genreController.deleteGenres)
+  .patch('/:id', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, genreController.updateGenres)
+  .delete('/:id', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, genreController.deleteGenres)
 
 module.exports = route

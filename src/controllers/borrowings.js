@@ -77,7 +77,7 @@ module.exports = {
       .then(result => res.json(result))
   },
   deleteBorrowing: (req, res) => {
-    const id = req.body.id
+    const id = req.params.id
 
     modelBorrowings.deleteBorrowing(id)
       .then(result => res.json(result))

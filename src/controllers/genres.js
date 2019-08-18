@@ -37,7 +37,7 @@ module.exports = {
       })
   },
   updateGenres: (req, res) => {
-    const id = req.body.id
+    const id = req.params.id
     const data = {
       name: req.body.name
     }
@@ -50,7 +50,7 @@ module.exports = {
       })
   },
   deleteGenres: (req, res) => {
-    const id = req.body.id
+    const id = req.params.id
 
     modelGenres.deleteGenre(id)
       .then(result => res.json(result))

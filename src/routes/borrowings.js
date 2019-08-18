@@ -8,7 +8,7 @@ route
   .post('/', auth.verifyTokenMiddleware, borrowingController.insertBorrowing)
   .get('/', auth.verifyTokenMiddleware, borrowingController.getAllBorrowing)
   .get('/:id', auth.verifyTokenMiddleware, borrowingController.getOneBorrowing)
-  .patch('/', auth.verifyTokenMiddleware, borrowingController.returningBook)
-  .delete('/', auth.verifyTokenMiddleware, borrowingController.deleteBorrowing)
+  .patch('/:id', auth.verifyTokenMiddleware, borrowingController.returningBook)
+  .delete('/:id', auth.verifyTokenMiddleware, borrowingController.deleteBorrowing)
 
 module.exports = route

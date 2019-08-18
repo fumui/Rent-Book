@@ -2,6 +2,9 @@
 
 Back-End of an App for borrowing books made using Node.js. This app use MVC style as it's structure. It didn't have any views yet, so it is recommended to use Postman for creating requests.
 
+## Built With
+[![Express.js](https://img.shields.io/badge/Express.js-4.x-orange.svg?style=rounded-square)](https://expressjs.com/en/starter/installing.html)
+[![Node.js](https://img.shields.io/badge/Node.js-v.10.16-green.svg?style=rounded-square)](https://nodejs.org/)
 
 ## Requirement
 
@@ -24,9 +27,12 @@ Back-End of an App for borrowing books made using Node.js. This app use MVC styl
 	```
 	npm start
 	```
+
 ## Documentation
 
+
 ### Books Routes
+
 
 #### GET Request
 
@@ -43,20 +49,23 @@ Back-End of an App for borrowing books made using Node.js. This app use MVC styl
 #### POST Request
 
  - "host/books/" => Inserting a book to database. data required = title, description, image, date_released, genre_id. 
-	- note = image is the url to the image, not the actual image
+	- note = 
+		- image is the url to the image, not the actual image
+		- admin previlege is required
 
 
 #### PATCH Request
 
- - "host/books/" => Updating a book in database. data required = id, title, description, image, date_released, genre_id.
+ - "host/books/{id}" => Updating a book in database with the specified id. data required = title, description, image, date_released, genre_id. (admin previlege is required)
 
 
 #### DELETE Request
 
- - "host/books/" => Deleting a book in database. data required = id.
+ - "host/books/{id}" => Deleting a book in database with the specified id.  (admin previlege is required)
 
 
 ### Genres Routes
+
 
 #### GET Request
 
@@ -66,15 +75,54 @@ Back-End of an App for borrowing books made using Node.js. This app use MVC styl
 
 #### POST Request
 
- - "host/genres/" => Inserting a genre to database. data required = name
+ - "host/genres/" => Inserting a genre to database. data required = name. (admin previlege is required)
 
 
 #### PATCH Request
 
- - "host/genres/" => Updating a genre in database. data required = id, name
+ - "host/genres/" => Updating a genre in database with the specified id. data required = name. (admin previlege is required)
 
 
 #### DELETE Request
 
- - "host/genres/" => Deleting a genre in database. data required = id.
+ - "host/genres/" => Deleting a genre in database with the specified id. (admin previlege is required)
 
+
+### Borrowing Routes
+
+
+#### GET Request
+
+ - "host/borrowings/" => display all borrowings. (admin previlege is required)
+ - "host/borrowings/{id}" => display one borrowing with the id specified by id parameter. (admin previlege is required)
+
+
+#### POST Request
+
+ - "host/borrowings/" => Inserting a borrowing to database. data required = book_id. (regular previlege is required)
+
+
+#### PATCH Request
+
+ - "host/borrowings/{id}" => Updating a borrowing in database with the specified id. data required = book_id (regular previlege is required)
+
+
+#### DELETE Request
+
+ - "host/borrowings/{id}" => Deleting a borrowing in database with the specified id. (admin previlege is required)
+
+
+### User Routes
+
+
+#### GET Request
+
+ - "host/users/" => display all users. (admin previlege is required)
+ - "host/users/{id}" => display one user with the id specified by id parameter. (admin previlege is required)
+
+
+#### POST Request
+
+ - "host/users/register" => registering a new regular user to database. data required = username, email, password
+ - "host/users/register/admin" => registering a new admin user to database. data required = username, email, password. (admin previlege is required)
+ - "host/users/login" => login route for generating new jwt token. data required = email, password

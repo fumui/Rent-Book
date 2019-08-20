@@ -89,6 +89,7 @@ module.exports = {
             if (err) {
               console.error(err)
             }
+            res.setHeader('Set-Cookie', `Authorization=Bearer ${token}; HttpOnly`)
             res.json({ token: `Bearer ${token}` })
           })
         } else { return responses.dataManipulationResponse(res, 200, 'Username or email is wrong') }

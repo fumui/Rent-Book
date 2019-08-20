@@ -4,6 +4,7 @@ const express = require('express')
 const app = express()
 const bodyparser = require('body-parser')
 const logger = require('morgan')
+const cors = require('cors')
 
 const bookRoute = require('./src/routes/books')
 const genreRoute = require('./src/routes/genres')
@@ -11,6 +12,8 @@ const borrowingRoute = require('./src/routes/borrowings')
 const userRoute = require('./src/routes/users')
 
 const port = process.env.SERVER_PORT || 3000
+
+app.use(cors())
 
 app.listen(port, () => {
   console.log(`Server is running at port ${port}`)

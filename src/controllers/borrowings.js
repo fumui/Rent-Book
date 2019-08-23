@@ -59,6 +59,18 @@ module.exports = {
         return responses(res, 500, err)
       })
   },
+  getLatestBorrowingByBookId: (req, res) => {
+    const id = req.params.id
+    modelBorrowings.getLatestBorrowingByBookId(id)
+      .then(result => {
+        if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
+        else return responses.getDataResponse(res, 200, null, null, null, 'Borrowing data not found')
+      })
+      .catch(err => {
+        console.error(err)
+        return responses(res, 500, err)
+      })
+  },
   returningBook: (req, res) => {
     const data = {
       book_id: req.body.book_id,

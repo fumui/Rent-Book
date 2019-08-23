@@ -29,7 +29,7 @@ module.exports = {
     const sort = req.query.sortby
     const availability = req.query.availability
     const page = req.query.page || 1
-    const limit = req.query.limit || 10
+    const limit = req.query.limit || 12
     const start = (Number(page) - 1) * limit
 
     modelBooks.getAllBook(keyword, sort, availability, start, limit)
@@ -48,6 +48,61 @@ module.exports = {
       .then(result => {
         if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
         else return responses.getDataResponse(res, 200, null, null, null, 'Book not found')
+      })
+      .catch(err => {
+        console.error(err)
+        return responses.getDataResponse(res, 500, err)
+      })
+  },
+  getTotalBooks: (req, res) => {
+    modelBooks.getTotalBooks()
+      .then(result => {
+        if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
+        else return responses.getDataResponse(res, 200, null, null, null, 'Data not found')
+      })
+      .catch(err => {
+        console.error(err)
+        return responses.getDataResponse(res, 500, err)
+      })
+  },
+  getBookYears: (req, res) => {
+    modelBooks.getBookYears()
+      .then(result => {
+        if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
+        else return responses.getDataResponse(res, 200, null, null, null, 'Books not found')
+      })
+      .catch(err => {
+        console.error(err)
+        return responses.getDataResponse(res, 500, err)
+      })
+  },
+  getBookByYear: (req, res) => {
+    modelBooks.getBookByYear(req.params.year)
+      .then(result => {
+        if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
+        else return responses.getDataResponse(res, 200, null, null, null, 'Books not found')
+      })
+      .catch(err => {
+        console.error(err)
+        return responses.getDataResponse(res, 500, err)
+      })
+  },
+  getBookByGenre: (req, res) => {
+    modelBooks.getBookByGenre(req.params.genre)
+      .then(result => {
+        if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
+        else return responses.getDataResponse(res, 200, null, null, null, 'Books not found')
+      })
+      .catch(err => {
+        console.error(err)
+        return responses.getDataResponse(res, 500, err)
+      })
+  },
+  getBooksByPopularity: (req, res) => {
+    modelBooks.getBooksByPopularity()
+      .then(result => {
+        if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
+        else return responses.getDataResponse(res, 200, null, null, null, 'Books not found')
       })
       .catch(err => {
         console.error(err)

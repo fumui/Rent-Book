@@ -31,7 +31,42 @@ module.exports = {
   },
   getOneBook: (id) => {
     return new Promise((resolve, reject) => {
-      conn.query('SELECT * FROM books WHERE id = ?', id, (err, result) => {
+      conn.query('SELECT * FROM books_list WHERE id = ?', id, (err, result) => {
+        if (err) { reject(err) } else { resolve(result) }
+      })
+    })
+  },
+  getTotalBooks: () => {
+    return new Promise((resolve, reject) => {
+      conn.query('SELECT `TABLE_ROWS` AS total FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_SCHEMA` = "rent-book" AND `TABLE_NAME` = "books"', (err, result) => {
+        if (err) { reject(err) } else { resolve(result) }
+      })
+    })
+  },
+  getBookYears: () => {
+    return new Promise((resolve, reject) => {
+      conn.query('SELECT YEAR(date_released) AS year FROM books_list GROUP BY year', (err, result) => {
+        if (err) { reject(err) } else { resolve(result) }
+      })
+    })
+  },
+  getBooksByPopularity: () => {
+    return new Promise((resolve, reject) => {
+      conn.query('SELECT books.id, books.title, books.image, books.availability, COUNT(book_id) AS popularity FROM `borrowings` JOIN books ON books.id = book_id WHERE books.availability = 1 GROUP BY book_id ORDER BY popularity DESC LIMIT 5', (err, result) => {
+        if (err) { reject(err) } else { resolve(result) }
+      })
+    })
+  },
+  getBookByYear: (year) => {
+    return new Promise((resolve, reject) => {
+      conn.query(`SELECT * FROM books_list WHERE YEAR(date_released) = ${year}`, (err, result) => {
+        if (err) { reject(err) } else { resolve(result) }
+      })
+    })
+  },
+  getBookByGenre: (genre) => {
+    return new Promise((resolve, reject) => {
+      conn.query(`SELECT * FROM books_list WHERE genre = ?`, genre, (err, result) => {
         if (err) { reject(err) } else { resolve(result) }
       })
     })

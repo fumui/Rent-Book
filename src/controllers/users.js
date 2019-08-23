@@ -5,6 +5,7 @@ const responses = require('../responses')
 const isFormValid = (data) => {
   const Joi = require('@hapi/joi')
   const schema = Joi.object().keys({
+    fullname: Joi.string().required(),
     username: Joi.string().alphanum().min(3).max(30).required(),
     password: Joi.string().min(8).required(),
     email: Joi.string().email({ minDomainSegments: 2 }),
@@ -24,6 +25,7 @@ const hash = (string) => {
 module.exports = {
   registerUser: (req, res) => {
     const userData = {
+      fullname: req.body.fullname,
       username: req.body.username,
       password: req.body.password,
       email: req.body.email,
@@ -41,7 +43,9 @@ module.exports = {
         if (result.length === 0) return modelUsers.registerUser(userData)
         else return responses.dataManipulationResponse(res, 200, 'Username or email already registered')
       })
-      .then(result => responses.dataManipulationResponse(res, 200, 'Success registering new user', { id: result[0].insertId, username: userData.username }))
+      .then(result => {
+        console.log(result)
+        return responses.dataManipulationResponse(res, 200, 'Success registering new user', { id: result.insertId, username: userData.username })})
       .catch(err => {
         console.error(err)
         return responses.dataManipulationResponse(res, 200, 'Failed registering user', err)
@@ -49,6 +53,7 @@ module.exports = {
   },
   registerAdmin: (req, res) => {
     const userData = {
+      fullname: req.body.fullname,
       username: req.body.username,
       password: req.body.password,
       email: req.body.email,
@@ -82,6 +87,8 @@ module.exports = {
           const jwt = require('jsonwebtoken')
           const payload = {
             id: result[0].id,
+            username: result[0].username,
+            fullname: result[0].fullname,
             email: result[0].email,
             level: result[0].level
           }
@@ -89,7 +96,7 @@ module.exports = {
             if (err) {
               console.error(err)
             }
-            res.setHeader('Set-Cookie', `Authorization=Bearer ${token}; HttpOnly`)
+            res.setHeader('Set-Cookie', `Authorization=Bearer ${token}`)
             res.json({ token: `Bearer ${token}` })
           })
         } else { return responses.dataManipulationResponse(res, 200, 'Username or email is wrong') }
@@ -128,5 +135,15 @@ module.exports = {
         console.error(err)
         return responses.getDataResponse(res, 500, err)
       })
+  },
+  getUserProfile: (req, res) => {
+    const userProfile = {
+      id: req.user_id,
+      username: req.user_name,
+      fullname: req.user_fullname,
+      email: req.user_email,
+      level: req.level
+    }
+    return responses.getDataResponse(res, 200, userProfile)
   }
 }

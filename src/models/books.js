@@ -8,7 +8,7 @@ module.exports = {
       })
     })
   },
-  getAllBook: (keyword = null, sort = null, availability = null, start, limit) => {
+  getAllBook: (keyword = null, sort = "title", availability = null, start, limit) => {
     return new Promise((resolve, reject) => {
       let query = 'SELECT * FROM books_list '
 

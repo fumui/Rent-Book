@@ -45,6 +45,13 @@ module.exports = {
       })
     })
   },
+  getBorrowingsHistoryByUserId: (id) => {
+    return new Promise((resolve, reject) => {
+      conn.query('SELECT * FROM borrowings JOIN `books_list` ON books_list.id = borrowings.book_id WHERE borrowings.user_id = ? GROUP BY books_list.id', id, (err, result) => {
+        if (err) { reject(err) } else { resolve(result) }
+      })
+    })
+  },
   returningBook: (id, data) => {
     return new Promise((resolve, reject) => {
       conn.query('UPDATE borrowings SET ? where id = ?', [data, id], (err, result) => {

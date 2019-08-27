@@ -7,8 +7,9 @@ const auth = require('../middlewares/auth')
 route
   .post('/', auth.verifyTokenMiddleware, borrowingController.insertBorrowing)
   .get('/', auth.verifyTokenMiddleware, borrowingController.getAllBorrowing)
-  .get('/:id', auth.verifyTokenMiddleware, borrowingController.getOneBorrowing)
   .get('/book/:id', auth.verifyTokenMiddleware, borrowingController.getLatestBorrowingByBookId)
+  .get('/history/:id', auth.verifyTokenMiddleware, borrowingController.getBorrowingsHistoryByUserId)
+  .get('/:id', auth.verifyTokenMiddleware, borrowingController.getOneBorrowing)
   .patch('/', auth.verifyTokenMiddleware, borrowingController.returningBook)
   .delete('/:id', auth.verifyTokenMiddleware, borrowingController.deleteBorrowing)
 

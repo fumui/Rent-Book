@@ -33,7 +33,7 @@ module.exports = {
     }
 
     if (!isFormValid(userData)) {
-      return responses.dataManipulationResponse(res, 200, 'Data is not valid')
+      return responses.dataManipulationResponse(res, 400, 'Data is not valid')
     }
 
     userData.password = hash(userData.password)
@@ -41,14 +41,14 @@ module.exports = {
     modelUsers.getAllUsersWithEmailOrUsername(userData.email, userData.username)
       .then(result => {
         if (result.length === 0) return modelUsers.registerUser(userData)
-        else return responses.dataManipulationResponse(res, 200, 'Username or email already registered')
+        else return responses.dataManipulationResponse(res, 409, 'Username or email already registered')
       })
       .then(result => {
         console.log(result)
         return responses.dataManipulationResponse(res, 200, 'Success registering new user', { id: result.insertId, username: userData.username })})
       .catch(err => {
         console.error(err)
-        return responses.dataManipulationResponse(res, 200, 'Failed registering user', err)
+        return responses.dataManipulationResponse(res, 500, 'Failed registering user', err)
       })
   },
   registerAdmin: (req, res) => {
@@ -69,12 +69,12 @@ module.exports = {
     modelUsers.getAllUsersWithEmailOrUsername(userData.email, userData.username)
       .then(result => {
         if (result.length === 0) return modelUsers.registerUser(userData)
-        else return responses.dataManipulationResponse(res, 200, 'Username or email already registered')
+        else return responses.dataManipulationResponse(res, 409, 'Username or email already registered')
       })
       .then(result => responses.dataManipulationResponse(res, 201, 'Success registering new user', { id: result[0].insertId, username: userData.username }))
       .catch(err => {
         console.error(err)
-        return responses.dataManipulationResponse(res, 200, 'Failed registering user', err)
+        return responses.dataManipulationResponse(res, 500, 'Failed registering user', err)
       })
   },
   login: (req, res) => {
@@ -98,7 +98,7 @@ module.exports = {
             }
             res.json({ token: `Bearer ${token}` })
           })
-        } else { return responses.dataManipulationResponse(res, 200, 'Email or password is wrong') }
+        } else { return responses.dataManipulationResponse(res, 404, 'Email or password is wrong') }
       })
       .catch(err => {
         console.error(err)
@@ -115,7 +115,7 @@ module.exports = {
     modelUsers.getAllUsers(keyword, sort, start, limit)
       .then(result => {
         if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length, null)
-        else return responses.getDataResponse(res, 200, null, null, null, 'No users found')
+        else return responses.getDataResponse(res, 404, null, null, null, 'No users found')
       })
       .catch(err => {
         console.error(err)
@@ -128,7 +128,7 @@ module.exports = {
     modelUsers.getOneUser(id)
       .then(result => {
         if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length, null)
-        else return responses.getDataResponse(res, 200, null, null, null, 'No users found')
+        else return responses.getDataResponse(res, 404, null, null, null, 'No users found')
       })
       .catch(err => {
         console.error(err)

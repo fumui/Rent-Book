@@ -5,7 +5,7 @@ const borrowingController = require('../controllers/borrowings')
 const auth = require('../middlewares/auth')
 
 route
-  .post('/', auth.verifyTokenMiddleware, borrowingController.insertBorrowing)
+  .post('/', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, borrowingController.insertBorrowing)
   .get('/', auth.verifyTokenMiddleware, borrowingController.getAllBorrowing)
   .get('/book/:id', auth.verifyTokenMiddleware, borrowingController.getLatestBorrowingByBookId)
   .get('/history/:id', auth.verifyTokenMiddleware, borrowingController.getBorrowingsHistoryByUserId)

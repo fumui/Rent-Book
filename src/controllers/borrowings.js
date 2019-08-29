@@ -5,7 +5,7 @@ const modelBook = require('../models/books')
 module.exports = {
   insertBorrowing: (req, res) => {
     const borrowingData = {
-      user_id: req.user_id,
+      user_id: req.body.user_id,
       book_id: req.body.book_id,
       borrowed_at: new Date()
     }
@@ -17,7 +17,7 @@ module.exports = {
             modelBook.setAvailability(borrowingData.book_id, 0)
           ])
         } else {
-          return responses.dataManipulationResponse(res, 200, 'Book is not yet available')
+          return responses.dataManipulationResponse(res, 409, 'Book is not yet available')
         }
       })
       .then(result => {
@@ -40,7 +40,7 @@ module.exports = {
     modelBorrowings.getAllBorrowing(keyword, sort, bookStatus, start, limit)
       .then(result => {
         if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length, page)
-        else return responses.getDataResponse(res, 200, result, result.length, page, 'Borrowing data not found')
+        else return responses.getDataResponse(res, 404, result, result.length, page, 'Borrowing data not found')
       })
       .catch(err => {
         console.error(err)
@@ -52,7 +52,7 @@ module.exports = {
     modelBorrowings.getOneBorrowing(id)
       .then(result => {
         if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
-        else return responses.getDataResponse(res, 200, null, null, null, 'Borrowing data not found')
+        else return responses.getDataResponse(res, 404, null, null, null, 'Borrowing data not found')
       })
       .catch(err => {
         console.error(err)
@@ -64,7 +64,7 @@ module.exports = {
     modelBorrowings.getLatestBorrowingByBookId(id)
       .then(result => {
         if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
-        else return responses.getDataResponse(res, 200, null, null, null, 'Borrowing data not found')
+        else return responses.getDataResponse(res, 404, null, null, null, 'Borrowing data not found')
       })
       .catch(err => {
         console.error(err)
@@ -76,7 +76,7 @@ module.exports = {
     modelBorrowings.getBorrowingsHistoryByUserId(id)
       .then(result => {
         if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
-        else return responses.getDataResponse(res, 200, null, null, null, 'Borrowing data not found')
+        else return responses.getDataResponse(res, 404, null, null, null, 'Borrowing data not found')
       })
       .catch(err => {
         console.error(err)
@@ -96,7 +96,7 @@ module.exports = {
             modelBook.setAvailability(data.book_id, 1)
           ])
         } else {
-          return responses.dataManipulationResponse(res, 200, 'Book has already been returned')
+          return responses.dataManipulationResponse(res, 409, 'Book has already been returned')
         }
       })
       .then(result => responses.dataManipulationResponse(res, 200, 'Success returning book', data))
@@ -112,7 +112,7 @@ module.exports = {
       .then(result => responses.dataManipulationResponse(res, 200, 'Success deleting borrowing data', result))
       .catch(err => {
         console.error(err)
-        return responses.dataManipulationResponse(res, 200, 'Failed to delete borrowing data', err)
+        return responses.dataManipulationResponse(res, 500, 'Failed to delete borrowing data', err)
       })
   }
 }

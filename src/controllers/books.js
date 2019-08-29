@@ -9,7 +9,7 @@ module.exports = {
       image: req.body.image,
       date_released: req.body.date_released,
       genre_id: req.body.genre_id,
-      availability: true,
+      availability: 1,
       created_at: new Date(),
       Updated_at: new Date()
     }
@@ -35,7 +35,7 @@ module.exports = {
     modelBooks.getAllBook(keyword, sort, availability, start, limit)
       .then(result => {
         if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length, page)
-        else return responses.getDataResponse(res, 200, null, null, null, 'Book not found')
+        else return responses.getDataResponse(res, 404, null, null, null, 'Book not found')
       })
       .catch(err => {
         console.error(err)
@@ -47,7 +47,7 @@ module.exports = {
     modelBooks.getOneBook(id)
       .then(result => {
         if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
-        else return responses.getDataResponse(res, 200, null, null, null, 'Book not found')
+        else return responses.getDataResponse(res, 404, null, null, null, 'Book not found')
       })
       .catch(err => {
         console.error(err)
@@ -58,7 +58,7 @@ module.exports = {
     modelBooks.getTotalBooks()
       .then(result => {
         if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
-        else return responses.getDataResponse(res, 200, null, null, null, 'Data not found')
+        else return responses.getDataResponse(res, 404, null, null, null, 'Data not found')
       })
       .catch(err => {
         console.error(err)
@@ -69,7 +69,7 @@ module.exports = {
     modelBooks.getBookYears()
       .then(result => {
         if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
-        else return responses.getDataResponse(res, 200, null, null, null, 'Books not found')
+        else return responses.getDataResponse(res, 404, null, null, null, 'Books not found')
       })
       .catch(err => {
         console.error(err)
@@ -80,7 +80,7 @@ module.exports = {
     modelBooks.getBookByYear(req.params.year)
       .then(result => {
         if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
-        else return responses.getDataResponse(res, 200, null, null, null, 'Books not found')
+        else return responses.getDataResponse(res, 404, null, null, null, 'Books not found')
       })
       .catch(err => {
         console.error(err)
@@ -91,7 +91,7 @@ module.exports = {
     modelBooks.getBookByGenre(req.params.genre)
       .then(result => {
         if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
-        else return responses.getDataResponse(res, 200, null, null, null, 'Books not found')
+        else return responses.getDataResponse(res, 404, null, null, null, 'Books not found')
       })
       .catch(err => {
         console.error(err)
@@ -102,7 +102,7 @@ module.exports = {
     modelBooks.getBooksByPopularity()
       .then(result => {
         if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
-        else return responses.getDataResponse(res, 200, null, null, null, 'Books not found')
+        else return responses.getDataResponse(res, 404, null, null, null, 'Books not found')
       })
       .catch(err => {
         console.error(err)
@@ -123,8 +123,15 @@ module.exports = {
     modelBooks.updateBook(id, data)
       .then(result => {
         data.id = id
-        if (result.affectedRows !== 0) return responses.dataManipulationResponse(res, 200, 'Success updating data', data)
-        else return responses.dataManipulationResponse(res, 200, 'Failed to update', data)
+        if (result.affectedRows !== 0) 
+          return modelBooks.getOneBook(id)
+        else 
+          return responses.dataManipulationResponse(res, 400, 'Failed to update', data)
+      })
+      .then(result=>{
+        console.log(result)
+        if (result.length !== 0) responses.dataManipulationResponse(res, 200, 'Success updating data', result)
+        else return responses.dataManipulationResponse(res, 400, 'please refresh', data)
       })
       .catch(err => {
         console.error(err)
@@ -138,7 +145,7 @@ module.exports = {
       .then(result => {
         result.id = id
         if (result.affectedRows !== 0) return responses.dataManipulationResponse(res, 200, 'Success deleting data', result)
-        else return responses.dataManipulationResponse(res, 200, 'Failed to delete', result)
+        else return responses.dataManipulationResponse(res, 400, 'Failed to delete', result)
       })
       .catch(err => {
         console.error(err)

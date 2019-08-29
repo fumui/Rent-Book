@@ -15,7 +15,7 @@ const port = process.env.SERVER_PORT || 3000
 
 app.use(cors())
 
-app.listen(port, () => {
+app.listen(port,'0.0.0.0', () => {
   console.log(`Server is running at port ${port}`)
 })
 app.use(logger('dev'))

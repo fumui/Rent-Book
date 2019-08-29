@@ -1,8 +1,7 @@
 
 module.exports = {
   getDataResponse: (res, statusCode, values, totalValues, page, message) => {
-    return res.json({
-      status: statusCode,
+    return res.status(statusCode).json({
       data: values,
       total: totalValues,
       page: page,
@@ -10,8 +9,7 @@ module.exports = {
     })
   },
   dataManipulationResponse: (res, statusCode, message, values) => {
-    return res.json({
-      status: statusCode,
+    return res.status(statusCode).json({
       message: message,
       data: values
     })

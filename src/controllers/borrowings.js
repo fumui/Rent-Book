@@ -71,9 +71,8 @@ module.exports = {
         return responses(res, 500, err)
       })
   },
-  getBorrowingsHistoryByUserId: (req, res) => {
-    const id = req.params.id
-    modelBorrowings.getBorrowingsHistoryByUserId(id)
+  getBorrowingsHistory: (req, res) => {
+    modelBorrowings.getBorrowingsHistoryByUserId(req.user_id)
       .then(result => {
         if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
         else return responses.getDataResponse(res, 404, null, null, null, 'Borrowing data not found')

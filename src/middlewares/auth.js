@@ -9,6 +9,7 @@ module.exports = {
       try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         if (decoded) {
+          console.log(decoded)
           req.user_id = decoded.id
           req.user_name = decoded.username
           req.user_fullname = decoded.fullname
@@ -25,6 +26,9 @@ module.exports = {
       res.sendStatus(403) }
   },
   verifyAdminPrevilege: (req, res, next) => {
-    if (req.level === 'admin') { next() } else { res.sendStatus(403) }
+    if (req.level === 'admin') { next() } else { 
+      console.error("no admin previlege")
+      res.sendStatus(403) 
+    }
   }
 }

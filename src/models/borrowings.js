@@ -47,7 +47,7 @@ module.exports = {
   },
   getBorrowingsHistoryByUserId: (id) => {
     return new Promise((resolve, reject) => {
-      conn.query('SELECT * FROM borrowings JOIN `books_list` ON books_list.id = borrowings.book_id WHERE borrowings.user_id = ? GROUP BY books_list.id', id, (err, result) => {
+      conn.query('SELECT * FROM borrowings JOIN `books_list` ON books_list.id = borrowings.book_id WHERE borrowings.user_id = ?', id, (err, result) => {
         if (err) { reject(err) } else { resolve(result) }
       })
     })

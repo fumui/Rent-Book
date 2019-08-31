@@ -1,5 +1,8 @@
 const conn = require('../configs/db')
 
+const books_list = 'select `books`.`id` AS `id`,`books`.`title` AS `title`,`books`.`description` AS `description`,`books`.`image` AS `image`,`books`.`date_released` AS `date_released`,`books`.`availability` AS `availability`,`genres`.`id` AS `genre_id`,`genres`.`name` AS `genre` from (`books` join `genres` on((`books`.`genre_id` = `genres`.`id`))) '
+
+
 module.exports = {
   insertBook: (data) => {
     return new Promise((resolve, reject) => {
@@ -10,7 +13,7 @@ module.exports = {
   },
   getAllBook: (keyword = null, sort = "title", availability = null, start, limit) => {
     return new Promise((resolve, reject) => {
-      let query = 'SELECT * FROM books_list '
+      let query = books_list
 
       const availabilityIsNotNull = availability != null
       const keywordIsNotNull = keyword != null
@@ -31,7 +34,7 @@ module.exports = {
   },
   getOneBook: (id) => {
     return new Promise((resolve, reject) => {
-      conn.query('SELECT * FROM books_list WHERE id = ?', id, (err, result) => {
+      conn.query(books_list+' WHERE books.id = ?', id, (err, result) => {
         if (err) { reject(err) } else { resolve(result) }
       })
     })
@@ -45,7 +48,7 @@ module.exports = {
   },
   getBookYears: () => {
     return new Promise((resolve, reject) => {
-      conn.query('SELECT YEAR(date_released) AS year FROM books_list GROUP BY year', (err, result) => {
+      conn.query('SELECT YEAR(date_released) AS year FROM books GROUP BY year', (err, result) => {
         if (err) { reject(err) } else { resolve(result) }
       })
     })
@@ -59,14 +62,14 @@ module.exports = {
   },
   getBookByYear: (year) => {
     return new Promise((resolve, reject) => {
-      conn.query(`SELECT * FROM books_list WHERE YEAR(date_released) = ${year}`, (err, result) => {
+      conn.query(`${books_list} WHERE YEAR(date_released) = ${year}`, (err, result) => {
         if (err) { reject(err) } else { resolve(result) }
       })
     })
   },
   getBookByGenre: (genre) => {
     return new Promise((resolve, reject) => {
-      conn.query(`SELECT * FROM books_list WHERE genre = ?`, genre, (err, result) => {
+      conn.query(`${books_list} WHERE genres.name = ?`, genre, (err, result) => {
         if (err) { reject(err) } else { resolve(result) }
       })
     })

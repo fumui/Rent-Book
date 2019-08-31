@@ -1,5 +1,6 @@
 const conn = require('../configs/db')
-
+const books_list = 'select `books`.`id` AS `id`,`books`.`title` AS `title`,`books`.`description` AS `description`,`books`.`image` AS `image`,`books`.`date_released` AS `date_released`,`books`.`availability` AS `availability`,`genres`.`id` AS `genre_id`,`genres`.`name` AS `genre` from (`books` join `genres` on((`books`.`genre_id` = `genres`.`id`))) '
+const borrowings_list = 'select `borrowings`.`id` AS `id`,`borrowings`.`book_id` AS `book_id`,`books`.`title` AS `title`,`users`.`username` AS `username`,`borrowings`.`borrowed_at` AS `borrowed_at`,`borrowings`.`returned_at` AS `returned_at` from ((`borrowings` join `users` on((`borrowings`.`user_id` = `users`.`id`))) join `books` on((`borrowings`.`book_id` = `books`.`id`)))'
 module.exports = {
   insertBorrowing: (data) => {
     return new Promise((resolve, reject) => {
@@ -10,7 +11,7 @@ module.exports = {
   },
   getAllBorrowing: (keyword = null, sort = null, bookStatus = null, start, limit) => {
     return new Promise((resolve, reject) => {
-      let query = 'SELECT * FROM `borrowings_list` '
+      let query = borrowings_list
 
       const bookStatusIsNotNull = bookStatus != null
       const keywordIsNotNull = keyword != null
@@ -33,7 +34,7 @@ module.exports = {
   },
   getOneBorrowing: (id) => {
     return new Promise((resolve, reject) => {
-      conn.query('SELECT * FROM borrowings_list WHERE id = ?', id, (err, result) => {
+      conn.query(`${borrowings_list} WHERE borrowings.id = ?`, id, (err, result) => {
         if (err) { reject(err) } else { resolve(result) }
       })
     })
@@ -47,7 +48,7 @@ module.exports = {
   },
   getBorrowingsHistoryByUserId: (id) => {
     return new Promise((resolve, reject) => {
-      conn.query('SELECT * FROM borrowings JOIN `books_list` ON books_list.id = borrowings.book_id WHERE borrowings.user_id = ?', id, (err, result) => {
+      conn.query('select borrowings.*, `books`.`id` AS `id`,`books`.`title` AS `title`,`books`.`description` AS `description`,`books`.`image` AS `image`,`books`.`date_released` AS `date_released`,`books`.`availability` AS `availability`,`genres`.`id` AS `genre_id`,`genres`.`name` AS `genre` from `books` join `genres` on`books`.`genre_id` = `genres`.`id` join borrowings on borrowings.book_id = books.id WHERE borrowings.user_id = ?', id, (err, result) => {
         if (err) { reject(err) } else { resolve(result) }
       })
     })

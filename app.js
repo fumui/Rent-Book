@@ -11,7 +11,7 @@ const genreRoute = require('./src/routes/genres')
 const borrowingRoute = require('./src/routes/borrowings')
 const userRoute = require('./src/routes/users')
 
-const port = process.env.SERVER_PORT || 3000
+const port = process.env.SERVER_PORT || 3306
 
 app.use(cors())
 

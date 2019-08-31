@@ -7,7 +7,7 @@ module.exports = {
       const bearer = bearerHeader.split(' ')
       const token = bearer[1]
       try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const decoded = jwt.verify(token, 'RentBookApp')
         if (decoded) {
           console.log(decoded)
           req.user_id = decoded.id

@@ -10,6 +10,7 @@ route
   .get('/total/', bookController.getTotalBooks)
   .get('/newest/', bookController.getNewestBooks)
   .get('/year/', bookController.getBookYears)
+  .get('/genre/', bookController.getBookGenres)
   .get('/year/:year', bookController.getBookByYear)
   .get('/genre/:genre', bookController.getBookByGenre)
   .get('/:id', bookController.getOneBook)

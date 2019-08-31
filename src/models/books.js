@@ -53,6 +53,13 @@ module.exports = {
       })
     })
   },
+  getBookGenres: () => {
+    return new Promise((resolve, reject) => {
+      conn.query('SELECT genres.name AS genre FROM genres WHERE genres.id IN (SELECT books.genre_id FROM books GROUP BY books.genre_id)', (err, result) => {
+        if (err) { reject(err) } else { resolve(result) }
+      })
+    })
+  },
   getNewestBooks: () => {
     return new Promise((resolve, reject) => {
       conn.query(books_list + `ORDER BY books.created_at DESC LIMIT 5`, (err, result) => {

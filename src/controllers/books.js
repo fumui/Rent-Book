@@ -76,6 +76,17 @@ module.exports = {
         return responses.getDataResponse(res, 500, err)
       })
   },
+  getBookGenres: (req, res) => {
+    modelBooks.getBookGenres()
+      .then(result => {
+        if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
+        else return responses.getDataResponse(res, 404, null, null, null, 'Books not found')
+      })
+      .catch(err => {
+        console.error(err)
+        return responses.getDataResponse(res, 500, err)
+      })
+  },
   getBookByYear: (req, res) => {
     modelBooks.getBookByYear(req.params.year)
       .then(result => {

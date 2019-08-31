@@ -11,12 +11,12 @@ const genreRoute = require('./src/routes/genres')
 const borrowingRoute = require('./src/routes/borrowings')
 const userRoute = require('./src/routes/users')
 
-const port = process.env.SERVER_PORT || 3306
+const PORT = process.env.PORT || 3306
 
 app.use(cors())
 
-app.listen(port,'0.0.0.0', () => {
-  console.log(`Server is running at port ${port}`)
+app.listen(PORT,'0.0.0.0', () => {
+  console.log(`Server is running at PORT ${PORT}`)
 })
 app.use(logger('dev'))
 app.use(bodyparser.json())

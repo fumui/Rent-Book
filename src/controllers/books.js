@@ -98,8 +98,8 @@ module.exports = {
         return responses.getDataResponse(res, 500, err)
       })
   },
-  getBooksByPopularity: (req, res) => {
-    modelBooks.getBooksByPopularity()
+  getNewestBooks: (req, res) => {
+    modelBooks.getNewestBooks()
       .then(result => {
         if (result.length !== 0) return responses.getDataResponse(res, 200, result, result.length)
         else return responses.getDataResponse(res, 404, null, null, null, 'Books not found')

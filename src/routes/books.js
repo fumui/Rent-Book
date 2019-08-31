@@ -8,7 +8,7 @@ route
   .post('/', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, bookController.insertBook)
   .get('/', bookController.getAllBook)
   .get('/total/', bookController.getTotalBooks)
-  .get('/popular/', bookController.getBooksByPopularity)
+  .get('/newest/', bookController.getNewestBooks)
   .get('/year/', bookController.getBookYears)
   .get('/year/:year', bookController.getBookByYear)
   .get('/genre/:genre', bookController.getBookByGenre)

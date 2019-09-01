@@ -92,7 +92,7 @@ module.exports = {
             email: result[0].email,
             level: result[0].level
           }
-          jwt.sign(payload, 'RentBookApp', (err, token) => {
+          jwt.sign(payload, process.env.JWT_SECRET, (err, token) => {
             if (err) {
               console.error(err)
             }

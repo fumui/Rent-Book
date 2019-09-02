@@ -53,9 +53,16 @@ module.exports = {
       })
     })
   },
-  getBooksByPopularity: () => {
+  getBookGenres: () => {
     return new Promise((resolve, reject) => {
-      conn.query('SELECT books.id, books.title, books.image, books.availability, COUNT(book_id) AS popularity FROM `borrowings` JOIN books ON books.id = book_id WHERE books.availability = 1 GROUP BY book_id ORDER BY popularity DESC LIMIT 5', (err, result) => {
+      conn.query('SELECT genres.name AS genre FROM genres WHERE genres.id IN (SELECT books.genre_id FROM books GROUP BY books.genre_id)', (err, result) => {
+        if (err) { reject(err) } else { resolve(result) }
+      })
+    })
+  },
+  getNewestBooks: () => {
+    return new Promise((resolve, reject) => {
+      conn.query(books_list + `ORDER BY books.created_at DESC LIMIT 5`, (err, result) => {
         if (err) { reject(err) } else { resolve(result) }
       })
     })

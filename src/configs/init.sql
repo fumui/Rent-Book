@@ -1,32 +1,7 @@
--- phpMyAdmin SQL Dump
--- version 4.8.5
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Aug 15, 2019 at 07:49 AM
--- Server version: 10.1.38-MariaDB
--- PHP Version: 7.3.3
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `rent-book`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `books`
---
 
 CREATE TABLE `books` (
   `id` int(11) NOT NULL,
@@ -40,27 +15,43 @@ CREATE TABLE `books` (
   `updated_at` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `books_list`
--- (See below for the actual view)
---
-CREATE TABLE `books_list` (
-`id` int(11)
-,`title` varchar(100)
-,`description` text
-,`image` text
-,`date_released` date
-,`availability` tinyint(1)
-,`genre` varchar(30)
-);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `borrowings`
---
+INSERT INTO `books` (`id`, `title`, `description`, `image`, `date_released`, `genre_id`, `availability`, `created_at`, `updated_at`) VALUES
+(1, 'The Saga of Tanya the Evil, Vol. 1', 'High above the blood-and mud-soaked trenches, a young girl pits herself against army mages in high stakes aerial duels with bullets, spells, and bayonets. Her name is Tanya Degurechaff and she is the Devil of the Rhine, one of the greatest soldiers the Empire has ever seen! But inside her mind lives a ruthless, calculating ex-salaryman who enjoyed a peaceful life in Japan until he woke up in a war-torn world. Reborn as a destitute orphaned girl with nothing to her name but memories of a previous life, Tanya will do whatever it takes to survive, even if she can find it only behind the barrel of a gun!', 'https://yenpress-us.imgix.net/covers/9780316512442.JPG?auto=format&w=298', '2017-12-16', 1, 1, '2019-08-12', '2019-09-01'),
+(3, 'No Game No Life, Vol. 1', 'The original light novel that started the phenomenon!\n\nIn this fantasy world, everything\'s a game--and these gamer siblings play to win!\n\nMeet Sora and Shiro, a brother and sister who are loser shut-ins by normal standards. But these siblings don\'t play by the rules of the \"crappy game\" that is average society. In the world of gaming, this genius pair reigns supreme, their invincible avatar so famous that it\'s the stuff of urban legend. So when a young boy calling himself God summons the siblings to a fantastic alternate world where war is forbidden and all conflicts--even those involving national borders--are decided by the outcome of games, Sora and Shiro have pretty much hit the jackpot. But they soon learn that in this world, humanity, cornered and outnumbered by other species, survives within the confines of one city. Will Sora and Shiro, two failures at life, turn out to be the saviors of mankind? Let the games begin...!', 'https://yenpress-us.imgix.net/covers/9780316383110.JPG?auto=format&w=298', '2015-04-19', 2, 1, '2019-08-13', '2019-08-29'),
+(4, 'No Game No Life, Vol. 2', 'The gamer siblings have their eyes on a new target--the land of the animal girls...\n\nIt\'s gamer siblings vs. animal girls, but first there\'s some angel trouble to deal with! After having been summoned to the world of Disboard, where a boyish god has declared that all conflicts must be resolved via games, the genius gamer siblings Sora and Shiro have ascended to rule over the strange world\'s embattled humans. Now brother and sister must challenge the other races directly, and the games are afoot! Will Sora and Shiro be able to stand against the might of the angelic Flügel race? The next chapter in the hit fantasy series begins here!', 'https://yenpress-us.imgix.net/covers/9780316385176.JPG?auto=format&w=298', '2015-07-09', 2, 0, '2019-08-13', '2019-08-30'),
+(5, 'No Game No Life, Vol. 3', 'One of the gamer siblings has vanished!\n\nIn the world of Disboard, everything is decided by games. And after rising to reign as the monarchs of the remnants of Disboard\'s humans, gamer siblings Sora and Shiro have now wagered the fate of every human being alive on the outcome of a game against the Eastern Union! But immediately after making this wager, Sora disappears, leaving only a cryptic message behind. \" \", the legendary two-in-one gamer, has been torn asunder! What is Sora thinking? What will Shiro do? What will become of humanity? And what about the paradise of animal girls?!\n\nIn the third volume of the bestselling alternate-world fantasy series, it\'s a risky showdown against the Werebeasts!', 'https://yenpress-us.imgix.net/covers/9780316385190.JPG?auto=format&w=298', '2015-07-21', 2, 1, '2019-08-13', '2019-08-13'),
+(6, 'No Game No Life, Vol. 4', 'Having been transported to the world of Disboard, where everything is decided by games, Sora and Shiro (who together form the unstoppable gamer team \" \") are still winning. They\'ve racked up an unbroken string of victories against opponents armed with all manner of magic and treachery. As the pair enjoy a well-deserved vacation in the Eastern Union, they\'re approached by a Dhampir named Plum. Sora and Shiro prepare for battle, but this game is one of the very few they haven\'t beaten and mastered--the game of love!', 'https://yenpress-us.imgix.net/covers/9780316385213.JPG?auto=format&w=298', '2015-07-17', 2, 1, '2019-08-13', '2019-08-23'),
+(7, 'No Game No Life, Vol. 5', 'In the world of Disboard, everything is decided by games. Since arriving in this strange place, genius gamer siblings Sora and Shiro have risen to become king and queen of what\'s left of Disboard\'s humans. Their latest challenge is winning an unwinnable romance game against the races of Dhampir and Siren. To uncover the true strategy to beat this sadistic game of love, they head for the home of the angelic Flügel: the midair city of Avant Heim. But the Flügel are a hideously powerful race, created specifically to kill gods. Will things really go as planned?', 'https://yenpress-us.imgix.net/covers/9780316385213.JPG?auto=format&w=298', '2016-12-20', 2, 0, '2019-08-13', '2019-08-13'),
+(8, 'No Game No Life, Vol. 6', 'Before Sora and Shiro set foot on Disboard, there was another remarkable duo!!\n\nTet, the One True God, takes a break to amuse himself among the mortals only to collapse on the streets of Elkia. When a familiar face finds him and lends a helping hand, the God of Play regales her with a tale from the Great War about a human man who challenged the world and a strange girl who sought to comprehend the human heart...', 'https://yenpress-us.imgix.net/covers/9780316385268.JPG?auto=format&w=298', '2017-07-25', 2, 1, '2019-08-13', '2019-08-13'),
+(9, 'No Game No Life, Vol. 7', 'IT\'S A GAME OF LIFE AND DEATH BETWEEN THE GAMER SIBLINGS AND A GOD!\nSubsequent to the eternal Great War, Disboard-the world where everything is decided by games and wagers rather than violence-is born. But winners still trample losers, and the victims pile up. A young Shrine Maiden laughs at how nothing has changed... Sora and Shiro agree to a dice game in which the number of dice you have is determined by your age, but in a contest where all the players are pitted against one another and death hangs in the balance, will the sibling gamers survive or lose everything-including their lives?', 'https://yenpress-us.imgix.net/covers/9780316316439.JPG?auto=format&w=298', '2018-10-30', 2, 1, '2019-08-13', '2019-08-13'),
+(10, 'No Game No Life, Vol. 8', 'History repeats itself...or does it?!\nWith the end of Sora and Shiro\'s dice game against the Old Deus fast approaching, they\'re faced with completing Jibril\'s final task-a strategic simulation game set during the ancient Great War, before the world of Disboard changed. As leaders of the weakest race, Immanity, the gamer siblings have one objective: Ensure that in this version of the War, no one dies. But when their Old Deus opponent demands a sacrifice, Sora and Shiro will have to come up with some unconventional tactics to secure victory!', 'https://yenpress-us.imgix.net/covers/9780316502665.JPG?auto=format&w=298', '2019-04-02', 2, 1, '2019-08-13', '2019-08-13'),
+(11, 'The Saga of Tanya the Evil, Vol. 3', 'Contrary to her dearest wish to find a safe place and stay there, Major Tanya von Degurechaff continues to wade through the fog of war with her troops on land, at sea, and in the air. After many battles with the increasingly numerous enemies of the Empire, a chance for a breakthrough finally appears.\n\nBut when her comrades begin celebrating the glories they\'ve reaped, savoring the sweet nectar of imminent triumph, Tanya alone is frozen in fear. Has the Empire decisively won the war, or is this nothing more than a Pyrrhic victory...?', 'https://yenpress-us.imgix.net/covers/9780316512480.JPG?auto=format&w=298', '2018-07-31', 1, 1, '2019-08-13', '2019-08-13'),
+(12, 'The Saga of Tanya the Evil, Vol. 4', 'A devil wanders the battlefield in the guise of an adorable young child and her name is Tanya Degurechaff! After returning from the sandy southlands, Tanya receives an incredibly suspicious order from headquarters to embark on a training exercise. In reality, command has sent her on a covert mission to initiate a border conflict with the Federation. Soon the Empire finds itself embroiled in another fight it cannot back down from, even if it means making the entire world their enemies!', 'https://yenpress-us.imgix.net/covers/9780316560627.JPG?auto=format&w=298', '2018-11-27', 1, 1, '2019-08-13', '2019-08-13'),
+(13, 'The Saga of Tanya the Evil, Vol. 5', 'Barely two months remain until winter, and opinion is split over whether the Empire should launch a full-scale offensive or rest until spring. Time is running out, and the General Staff can\'t make up their minds. While everyone else is frozen with inaction, the Salamander Kampfgruppe under Tanya\'s command is singled out for a mission that will ultimately decide the army\'s course. As they face attacks from a seemingly relentless enemy that leave them without even time to sleep, will Tanya\'s troops be able to hold out?', 'https://yenpress-us.imgix.net/covers/9780316560696.JPG?auto=format&w=298', '2019-03-26', 1, 1, '2019-08-13', '2019-08-13'),
+(14, 'The Saga of Tanya the Evil, Vol. 6', 'Through the bone-chilling winter wind, the clashes of war can be heard. Equipped with fragile weapons and machinery, Tanya and her unit march toward the Eastern front. There, Tanya realizes the primitiveness of it all, and that it\'ll take more than a miracle to emerge unscathed...', 'https://yenpress-us.imgix.net/covers/9780316560719.JPG?auto=format&w=298', '2019-08-04', 1, 1, '2019-08-13', '2019-08-25'),
+(15, 'Overlord, Vol. 1', 'For twelve years, the virtual world of Yggdrasil has served as the playground and battlefield for the skeletal lord Momonga and his guild of fellow monsters, Ainz Ooal Gown. But the guild\'s glory days are over, and the game is shutting down permanently. When Momonga logs in one last time just to be there when the servers go dark, something happens--and suddenly, fantasy is reality. A rogues\' gallery of fanatically devoted NPCs is ready to obey his every order, but the world Momonga now inhabits is not the one he remembers. The game may be over, but the epic tale of Ainz Ooal Gown is only beginning...', 'https://yenpress-us.imgix.net/covers/9780316272247.JPG?auto=format&w=298', '2016-05-24', 1, 1, '2019-08-13', '2019-08-13'),
+(17, 'Overlord, Vol. 3', 'Lord Ainz has made great progress moonlighting as the indomitable hero Momon, but what should be a moment of triumph is shattered--by news of rebellion. He vows to find out what has happened and to defend the honor of his guild and home--Ainz Ooal Gown.', 'https://yenpress-us.imgix.net/covers/9780316363938.JPG?auto=format&w=298', '2017-01-31', 1, 1, '2019-08-13', '2019-08-13'),
+(18, 'The Devil Is a Part-Timer! High School!, Vol. 1', 'In this spin-off of the popular novel series, the Devil King Maou and Emilia, the Hero, are reincarnated after their terrible battle as high school students in modern-day Japan! Add in the innocent Chiho, a fellow student with a crush on the former lord of darkness, and you\'ve got a high school comedy devilish in its scale!', 'https://yenpress-us.imgix.net/covers/9780316385114.JPG?auto=format&w=298', '2015-08-18', 6, 1, '2019-08-13', '2019-08-13'),
+(19, 'The Devil Is a Part-Timer! High School!, Vol. 2', 'Maou (aka the Devil King) and Emi (aka Emilia the Hero) have arrived from another world--and now they\'re in high school! Things are crazy enough already with classmate Chiho\'s ongoing crush on Maou, but are these kids going to be ready when a little girl shows up on Maou\'s doorstep and calls him \"papa\"?', 'https://yenpress-us.imgix.net/covers/9780316385121.JPG?auto=format&w=298', '2015-11-17', 6, 1, '2019-08-13', '2019-08-13'),
+(20, 'The Devil Is a Part-Timer! High School!, Vol. 3', 'The Devil King and the Hero have found themselves flung from their world into ours--now they\'re just Maou and Emi, high school students in modern Japan. They\'ve both got their sights set on becoming president of the student council, and sparks fly as their campaigns get rolling! But when the two get a little too up in each other\'s faces at the summer festival, their fellow student Chiho (with her crush on Maou) can remain silent no longer! Is there more between these two than they\'re willing to admit even to themselves?', 'https://yenpress-us.imgix.net/covers/9780316385145.JPG?auto=format&w=298', '2015-02-23', 6, 1, '2019-08-13', '2019-08-13'),
+(21, 'The Devil Is a Part-Timer! High School!, Vol. 4', 'The Devil King and the Hero clash in an epic battle--in high school? Maou and Emi\'s latest feud centers on the race for student council president. The day of the election has arrived, but what will happen when the truth of Chiho\'s long-held crush on Maou comes to light? If only high school were as easy as a demonic reign of terror!', 'https://yenpress-us.imgix.net/covers/9780316272391.JPG?auto=format&w=298', '2015-06-28', 6, 1, '2019-08-13', '2019-08-13'),
+(22, 'The Devil Is a Part-Timer! High School!, Vol. 5', 'Having been banished to modern-day Japan to attend high school, the Devil King (Maou) and the Hero (Emi) have been fighting a high-stakes battle to control the student council! When Maou manages to win, the defeated Emi feels a terrible pang in her chest for...Maou?! Surely not! Did the high school foibles of these fated rivals just get a lot more complicated?', 'https://yenpress-us.imgix.net/covers/9780316317986.JPG?auto=format&w=298', '2016-10-25', 6, 1, '2019-08-15', '2019-08-15'),
+(24, 'Overlord, Vol. 4', 'One day, in a peaceful lizardman village, an ominous messenger visits with a warning from the Great Tomb of Nazarick: In eight days\' time, they will be annihilated. Unwilling to stand by and wait, the fighter and traveler Zaryusu journeys to the other lizardman tribes--who have received the same message--hoping to form an alliance against their impossibly strong opponent. But though the warriors try valiantly to resist, Ainz Ooal Gown and his undead army hold the power to determine their fate...', 'https://yenpress-us.imgix.net/covers/9780316397599.JPG?auto=format&w=298', '2017-05-23', 1, 1, '2019-08-17', '2019-08-17'),
+(25, 'Overlord, Vol. 5', 'In the kingdom of Re-Estize, a sinister organization known as the Eight Fingers holds sway of the criminal underworld. Ainzs orders Sebas to infiltrate the capital to gather intel on this shadowy group sucking the marrow from the kingdom\'s bones. At the same time, a young soldier named Climb struggles to hone his skills to better serve the \"Golden Princess\" while the once great warrior Brian returns home a broken man... Against the backdrop of an ancient city fraying at its edges, three men will challenge the corruption of the vicious Eight Fingers!', 'https://yenpress-us.imgix.net/covers/9780316397612.JPG?auto=format&w=298', '2017-09-19', 1, 1, '2019-08-18', '2019-08-18'),
+(30, 'Overlord, Vol. 8 (manga)', 'The lizardman conflict comes to a decisive and bloody end as Ainz turns his attention north towards the humans once more. The Re-Estize Kingdom\'s princess has beauty, intelligence, and kindness in spades. She\'s guarded by a fiercely loyal young man-who also carries a secret torch for her. His vow to protect her will take him from courtly intrigue deep down into the underbelly of the country. Will the steadfast youth be able to protect his golden princess...?', 'https://yenpress-us.imgix.net/covers/9781975328139.jpg?auto=format&w=298', '2018-11-13', 1, 1, '2019-08-23', '2019-08-23'),
+(38, 'Accel World, Vol. 5 (light novel)', 'Prepare for a full dive!  Seiji Nomi\'s scheming from his position atop the school social hierarchy has ceased. Sky Raker has returned to the Accelerated World, and upon joining Nega Nebulus, she and Kuroyukihime have become a force to be reckoned with. But one day, Haruyuki hears the news that the social camera network has been expanded to include the Hermes\' Cord space elevator, and he realizes what the next stage of the game will be: space. Upon arriving, he is aided by a mysterious operator in taking on the biggest mission in the history of Brain Burst! Plus, Kuroyukihime and Haruyuki have a chance to experience their first overnight event--except they have gatecrashers!', 'https://yenpress-us.imgix.net/covers/9780316296397.JPG?auto=format&w=298', '2015-11-08', 1, 0, '2019-08-27', '2019-09-01'),
+(40, 'Accel World, Vol. 6 (light novel)', 'The silver wings responsible for the rise of Nega Nebulus, the legion led by Kuroyukihime, are weakening! During the battle with the mysterious Acceleration Research Society, Haruyuki sustained corrosion damage from the revived Chrome Disaster, and he has still been unable to escape its effects. The Seven Kings of Pure Color take this very seriously, and soon they hand down their judgement: purification. Now Haruyuki is faced with a choice--undergo the grueling purification process, or have a bounty on his head and risk being cast out of the Accelerated World altogether!', 'https://yenpress-us.imgix.net/covers/9780316296403.JPG?auto=format&w=298', '2016-03-22', 1, 0, '2019-08-27', '2019-08-27'),
+(42, 'Overlord, Vol. 7 (light novel)', 'A group of \"workers\" whose better judgement has been clouded by hopes and expectations have descended into the unknown depths of a mysterious tomb.  These trespassers include the small but elite team Foresight, the storied warriors of Heavy Masher, the crew lead by a legendary elder worker, Green Leaf, and the invincible swordsmen of Angel.  They are some of the best that can be hired, but as more and more vengeful residents of Nazarrick appear, will any make it out alive?', 'https://yenpress-us.imgix.net/covers/9780316398817.JPG?auto=format&w=298', '2018-05-22', 1, 1, '2019-08-28', '2019-08-28'),
+(43, 'Overlord, Vol. 9 (light novel)', 'The annual war between the kingdom and the empire almost always ends in little more than a staring contest. This year, the Fresh Blood Emperor\'s visit to Nazarick will change everything. Ainz himself has joined the fray, which is a dark omen of the coming storm. The arrival of the absolute ruler of Nazarick means only horror and death await those who stand on what will become the most hellish battlefield anyone has seen in living memory...!', 'https://yenpress-us.imgix.net/covers/9780316398862.JPG?auto=format&w=298', '2019-01-22', 1, 1, '2019-08-28', '2019-08-28'),
+(45, 'Overlord, Vol. 4 (manga)', 'Bloodlust is in the air--and plenty of real blood too! Shalltear is on the hunt, but she may not like what she finds. Ainz sent her out for information, but when Blood Frenzy activates, the time for talk is over. Can anyone, undead or alive, put an end to her reign of terror...?', 'https://yenpress-us.imgix.net/covers/9780316476430.JPG?auto=format&w=298', '2017-10-31', 1, 1, '2019-08-28', '2019-08-28'),
+(46, 'Overlord, Vol. 6 (manga)', 'The day of the battle with the Great One fast approaches. Can Zaryusu unite the lizardmen tribes before they\'re all wiped from this earth? The Red Eyes have agreed to an alliance, but the Dragon Tusks will be trickier. They prize strength above all else-meaning Zaryusu will need to defeat their chief in combat before they\'ll even think of hearing him out!', 'https://yenpress-us.imgix.net/covers/9780316517270.JPG?auto=format&w=298', '2018-04-24', 1, 1, '2019-08-28', '2019-08-28'),
+(47, 'Overlord, Vol. 7 (light novel)', 'A group of \"workers\" whose better judgement has been clouded by hopes and expectations have descended into the unknown depths of a mysterious tomb.  These trespassers include the small but elite team Foresight, the storied warriors of Heavy Masher, the crew lead by a legendary elder worker, Green Leaf, and the invincible swordsmen of Angel.  They are some of the best that can be hired, but as more and more vengeful residents of Nazarrick appear, will any make it out alive?', 'https://yenpress-us.imgix.net/covers/9780316398817.JPG?auto=format&w=298', '2018-05-22', 1, 1, '2019-08-28', '2019-08-28'),
+(50, 'Konosuba: God\'s Blessing on This Wonderful World!, Vol. 1 (light novel)', 'Game loving shut-in Kazuma Sato\'s life as a young schoolboy in Japan abruptly comes to an early end...or at least it was supposed to. When he opens his eyes, though, he sees a beautiful goddess that offers him a once in an after-lifetime chance to be reborn in a parallel world. The catch is that the world is violent and threatened by a growing evil! Fortunately, he can choose any one thing to bring with him. So he chooses the goddess, Aqua! And so his adventure with his gorgeous companion begins--if he could just get enough money and food to survive, keep his goddess out of trouble, and avoid grabbing the attention of the Demon King\'s army!', 'https://yenpress-us.imgix.net/covers/9780316553377.JPG?auto=format&w=298', '2017-02-16', 2, 1, '2019-08-30', '2019-08-31'),
+(51, 'Konosuba: God\'s Blessing on This Wonderful World!, Vol. 2 (light novel)', 'Kazuma\'s first winter in another world isn\'t going so well. With companions like Aqua (Arch-priest), Megumin (Arch-wizard), and Darkness (Crusader), his party of advanced classes should be the most powerful in Axel--but they\'re so dysfunctional, even the easiest-seeming quest goes terribly awry, and they can barely save enough to afford a stable! When an opportunity arises to stay in a mansion, it\'s like a dream come true--the only catch is that they have to exorcise the evil spirits haunting it. Goddess Aqua is an expert with the undead, so the quest should be a piece of cake, right...? Unfortunately, with this useless goddess, things have a way of working out for the worst...', 'https://yenpress-us.imgix.net/covers/9780316468701.JPG?auto=format&w=298', '2017-04-18', 2, 1, '2019-08-30', '2019-08-30'),
+(52, 'Konosuba: God\'s Blessing on This Wonderful World!, Vol. 3 (light novel)', 'After successfully saving the town from Mobile Fortress Destroyer, Kazuma is ready to sit back and enjoy the hero treatment: fame, fortune, and...criminal charges?! Now in hot water with the law, he has to find a way to clear his name with the help of Aqua, Megumin, and Darkness before the judge can sentence him to death. Darkness has a plan to buy more time, but will it be enough...? After all, in this wonderful world, who knows what\'ll happen?', 'https://yenpress-us.imgix.net/covers/9780316468732.JPG?auto=format&w=298', '2017-08-22', 2, 0, '2019-08-30', '2019-08-30'),
+(53, 'Konosuba: God\'s Blessing on This Wonderful World!, Vol. 4 (light novel)', 'IT\'S TIME FOR REST, RELAXATION...AND RELIGION?!  Kazuma and crew have made it through the winter in one piece (for the most part), and they\'re in dire need of a break...and for stressed and tired adventurers, there\'s only one place to go-the hot springs! With open-air baths and beautiful mountain scenery, Arcanletia has everything they need for a relaxing vacation. Not only that, but rumor has it the Demon King\'s army is avoiding the place. The reports also say it\'s because Aqua\'s Axis Church scared them off, but her loyal followers can\'t be that bad, right...?', 'https://yenpress-us.imgix.net/covers/9780316468763.JPG?auto=format&w=298', '2017-12-19', 2, 0, '2019-08-30', '2019-08-30'),
+(54, 'Overlord a la Carte, Vol. 1s', 'Meet your favorite characters from the mega-popular Overlord in its first-ever comic anthology! Whether it\'s to reaffirm your undying love for Ainz-sama or further explore the world of Yggdrasil and Nazarick, this book will satisfy all your fan cravings!', 'https://yenpress-us.imgix.net/covers/9781975358921.jpg?auto=format&w=298', '2019-08-27', 2, 1, '2019-08-31', '2019-08-31'),
+(55, 'Overlord, Vol. 3 (manga)', 'Posing as an adventurer in order to gather information about the world he\'s found himself in, Ainz ventures forth into the city, posing as an adventurer in order to gather information about the world he\'s found himself in. Finding work was easy enough, but when it leads to a plot that will devastate the city, he\'\'s forced to take action--and will his powers be enough against the terrifying warrior Clementine?', 'https://yenpress-us.imgix.net/covers/9780316434256.JPG?auto=format&w=298', '2016-12-20', 1, 1, '2019-09-01', '2019-09-01');
 
 CREATE TABLE `borrowings` (
   `id` int(11) NOT NULL,
@@ -70,148 +61,70 @@ CREATE TABLE `borrowings` (
   `returned_at` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Stand-in structure for view `borrowings_list`
--- (See below for the actual view)
---
-CREATE TABLE `borrowings_list` (
-`id` int(11)
-,`book_id` int(11)
-,`title` varchar(100)
-,`username` varchar(20)
-,`borrowed_at` date
-,`returned_at` date
-);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `genres`
---
+INSERT INTO `borrowings` (`id`, `book_id`, `user_id`, `borrowed_at`, `returned_at`) VALUES
+(84, 38, 3, '2019-09-01', NULL),
+(85, 1, 1, '2019-09-01', '2019-09-01'),
+(86, 40, 3, '2019-09-01', NULL),
+(87, 53, 1, '2019-09-01', NULL),
+(88, 1, 1, '2019-09-01', '2019-09-01'),
+(89, 52, 1, '2019-09-01', NULL),
+(90, 4, 1, '2019-09-01', NULL),
+(91, 7, 1, '2019-09-01', NULL);
 
 CREATE TABLE `genres` (
   `id` int(11) NOT NULL,
   `name` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
+INSERT INTO `genres` (`id`, `name`) VALUES
+(1, 'Action'),
+(2, 'Adventure'),
+(4, 'Romance'),
+(5, 'Fantasy'),
+(6, 'Slice of Life'),
+(7, 'Horor'),
+(8, 'Sci-fi');
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `email` varchar(30) NOT NULL,
+  `fullname` varchar(50) NOT NULL,
   `username` varchar(20) NOT NULL,
   `password` varchar(100) NOT NULL,
   `level` enum('admin','regular') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `users`
---
+INSERT INTO `users` (`id`, `email`, `fullname`, `username`, `password`, `level`) VALUES
+(1, 'fuad@gmail.com', 'Fuad Mustamirrul Ishlah', 'fuad', 'e5d9a8cad94803d2da5e570b0c7d7ba7313a675d4c889846910380670940703a', 'admin'),
+(2, 'regular@gmail.com', '', 'regular', 'b4a7d0d324271505b9da50d6e5554cd0ac2479569be43ec65d4a41db191b9404', 'regular'),
+(3, 'amir24405@gmail.com', 'Fuad Mustamirrul Ishlah', 'FuadMustamirrul', 'effa5a9da1915b01e1189862ea5da161150bfc6ad85ad5d1007eed5b3d643057', 'regular'),
+(4, 'amir244045@gmail.com', 'Fuad Mustamirrul Ishlah', 'IndBronyasd', 'effa5a9da1915b01e1189862ea5da161150bfc6ad85ad5d1007eed5b3d643057', 'regular'),
+(5, 'test@gmail.com', 'NewUser', 'New', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'regular'),
+(6, 'amir244065@gmail.com', 'Fuad Mustamirrul Ishlah', 'IndBrony', 'b443c5682a0e4e118f0ee58bdfeb786c7577ab1cb62f47e8193ba77b4f75f984', 'regular'),
+(10, 'new@new.com', 'New User', 'NewUser', '0a413556419d59405572d6f35a672ad9a324251dacb0606d8d091fa5488b5ef1', 'regular');
 
-INSERT INTO `users` (`id`, `email`, `username`, `password`, `level`) VALUES
-(1, 'admin@gmail.com', 'admin', 'e5d9a8cad94803d2da5e570b0c7d7ba7313a675d4c889846910380670940703a', 'admin');
-
--- --------------------------------------------------------
-
---
--- Structure for view `books_list`
---
-DROP TABLE IF EXISTS `books_list`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `books_list`  AS  select `books`.`id` AS `id`,`books`.`title` AS `title`,`books`.`description` AS `description`,`books`.`image` AS `image`,`books`.`date_released` AS `date_released`,`books`.`availability` AS `availability`,`genres`.`name` AS `genre` from (`books` join `genres` on((`books`.`genre_id` = `genres`.`id`))) ;
-
--- --------------------------------------------------------
-
---
--- Structure for view `borrowings_list`
---
-DROP TABLE IF EXISTS `borrowings_list`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `borrowings_list`  AS  select `borrowings`.`id` AS `id`,`borrowings`.`book_id` AS `book_id`,`books`.`title` AS `title`,`users`.`username` AS `username`,`borrowings`.`borrowed_at` AS `borrowed_at`,`borrowings`.`returned_at` AS `returned_at` from ((`borrowings` join `users` on((`borrowings`.`user_id` = `users`.`id`))) join `books` on((`borrowings`.`book_id` = `books`.`id`))) ;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `books`
---
 ALTER TABLE `books`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `genre_id` (`genre_id`);
+  ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `borrowings`
---
 ALTER TABLE `borrowings`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `book_id` (`book_id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `genres`
---
 ALTER TABLE `genres`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `users`
---
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `books`
---
+  
 ALTER TABLE `books`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
---
--- AUTO_INCREMENT for table `borrowings`
---
 ALTER TABLE `borrowings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
---
--- AUTO_INCREMENT for table `genres`
---
 ALTER TABLE `genres`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
---
--- AUTO_INCREMENT for table `users`
---
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `books`
---
-ALTER TABLE `books`
-  ADD CONSTRAINT `books_ibfk_1` FOREIGN KEY (`genre_id`) REFERENCES `genres` (`id`);
-
---
--- Constraints for table `borrowings`
---
-ALTER TABLE `borrowings`
-  ADD CONSTRAINT `borrowings_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `books` (`id`),
-  ADD CONSTRAINT `borrowings_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

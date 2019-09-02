@@ -43,6 +43,16 @@ Back-End of an App for borrowing books made using Node.js. This app use MVC styl
 	- limit -> number of books displayed in a page (default 10)
 	- search -> display all books with title that contains the keyword.
 
+ - "host/books/newest" => get 5 newest books added to database
+
+ - "host/books/year" => get a list of year books date_released 
+
+ - "host/books/year/{year}" => get a list of books that released at {year} 
+
+ - "host/books/genre" => get a list of genre that existed in books table
+
+ - "host/books/genre/{genreName}" => get a list of books with genre {genreName} 
+
  - "host/books/{id}" => display one book with the id specified by id parameter
 
 
@@ -94,6 +104,8 @@ Back-End of an App for borrowing books made using Node.js. This app use MVC styl
 #### GET Request
 
  - "host/borrowings/" => display all borrowings. (admin previlege is required)
+ - "host/borrowings/history" => display all borrowings data of the current logged in user. 
+ - "host/borrowings/book/{bookId}" => returns borrowing data of book with id {bookId} if it not yet returned, if the book is already returned returns null
  - "host/borrowings/{id}" => display one borrowing with the id specified by id parameter. (admin previlege is required)
 
 
@@ -118,6 +130,7 @@ Back-End of an App for borrowing books made using Node.js. This app use MVC styl
 #### GET Request
 
  - "host/users/" => display all users. (admin previlege is required)
+ - "host/users/profile" => get the profile of current logged in user
  - "host/users/{id}" => display one user with the id specified by id parameter. (admin previlege is required)
 
 

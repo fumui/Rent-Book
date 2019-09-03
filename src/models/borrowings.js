@@ -66,7 +66,7 @@ module.exports = {
   },
   getBorrowingRequests: () => {
     return new Promise((resolve, reject) => {
-      conn.query('SELECT * FROM borrowings WHERE is_confirmed = 0', (err, result) => {
+      conn.query('SELECT borrowings.*, books.title, users.username FROM borrowings JOIN books ON borrowings.book_id = books.id JOIN users ON users.id = borrowings.user_id WHERE is_confirmed = 0', (err, result) => {
         if (err) { reject(err) } else { resolve(result) }
       })
     })

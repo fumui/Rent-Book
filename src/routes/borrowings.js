@@ -13,6 +13,6 @@ route
   .get('/:id', auth.verifyTokenMiddleware, borrowingController.getOneBorrowing)
   .patch('/confirm', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, borrowingController.confirmBorrowing)
   .patch('/', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, borrowingController.returningBook)
-  .delete('/:id', auth.verifyTokenMiddleware, borrowingController.deleteBorrowing)
+  .delete('/:id', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, borrowingController.deleteBorrowing)
 
 module.exports = route

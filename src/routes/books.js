@@ -1,11 +1,12 @@
 const express = require('express')
 const route = express.Router()
+const multerUploads = require('../middlewares/multer').multerUploads
 
 const bookController = require('../controllers/books')
 const auth = require('../middlewares/auth')
 
 route
-  .post('/', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, bookController.insertBook)
+  .post('/', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, multerUploads, bookController.insertBook)
   .get('/', bookController.getAllBook)
   .get('/total/', bookController.getTotalBooks)
   .get('/newest/', bookController.getNewestBooks)

@@ -4,10 +4,12 @@ const modelBook = require('../models/books')
 
 module.exports = {
   requestBorrowing: (req, res) => {
-    const borrowingData = {
-      user_id: req.user_id,
+    let borrowingData = {
+      user_id: req.body.user_id,
       book_id: req.body.book_id,
+      is_confirmed: req.body.is_confirmed || 0,
     }
+    if(borrowingData.is_confirmed !== 0) borrowingData.borrowed_at = new Date()
     modelBook.getAvailability(borrowingData.book_id)
       .then(result => {
         if (result[0].availability === 1) {

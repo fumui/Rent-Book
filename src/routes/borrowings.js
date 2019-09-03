@@ -5,12 +5,14 @@ const borrowingController = require('../controllers/borrowings')
 const auth = require('../middlewares/auth')
 
 route
-  .post('/', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, borrowingController.insertBorrowing)
+  .post('/', auth.verifyTokenMiddleware, borrowingController.requestBorrowing)
   .get('/', auth.verifyTokenMiddleware, borrowingController.getAllBorrowing)
+  .get('/requests', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, borrowingController.getBorrowingRequests)
   .get('/history/', auth.verifyTokenMiddleware, borrowingController.getBorrowingsHistory)
   .get('/book/:id', auth.verifyTokenMiddleware, borrowingController.getLatestBorrowingByBookId)
   .get('/:id', auth.verifyTokenMiddleware, borrowingController.getOneBorrowing)
-  .patch('/', auth.verifyTokenMiddleware, borrowingController.returningBook)
-  .delete('/:id', auth.verifyTokenMiddleware, borrowingController.deleteBorrowing)
+  .patch('/confirm', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, borrowingController.confirmBorrowing)
+  .patch('/', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, borrowingController.returningBook)
+  .delete('/:id', auth.verifyTokenMiddleware, auth.verifyAdminPrevilege, borrowingController.deleteBorrowing)
 
 module.exports = route

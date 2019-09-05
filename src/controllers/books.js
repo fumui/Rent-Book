@@ -141,24 +141,50 @@ module.exports = {
       genre_id: req.body.genre_id,
       Updated_at: new Date()
     }
+    const image = req.file
+    if (image){
+      const file = multer.dataUri(req).content
+      cloudinary.uploader.upload(file).then(uploadResult=>{
+        data.image = uploadResult.url
+        modelBooks.updateBook(id, data)
+          .then(result => {
+            data.id = id
+            if (result.affectedRows !== 0) 
+              return modelBooks.getOneBook(id)
+            else 
+              return responses.dataManipulationResponse(res, 400, 'Failed to update', data)
+          })
+          .then(result=>{
+            console.log(result)
+            if (result.length !== 0) responses.dataManipulationResponse(res, 200, 'Success updating data', result)
+            else return responses.dataManipulationResponse(res, 400, 'please refresh', data)
+          })
+          .catch(err => {
+            console.error(err)
+            return responses.getDataResponse(res, 500, err)
+          })
+      })
+    }else{
+      console.log("tak ada image", data)
+      modelBooks.updateBook(id, data)
+        .then(result => {
+          data.id = id
+          if (result.affectedRows !== 0) 
+            return modelBooks.getOneBook(id)
+          else 
+            return responses.dataManipulationResponse(res, 400, 'Failed to update', data)
+        })
+        .then(result=>{
+          console.log(result)
+          if (result.length !== 0) responses.dataManipulationResponse(res, 200, 'Success updating data', result)
+          else return responses.dataManipulationResponse(res, 400, 'please refresh', data)
+        })
+        .catch(err => {
+          console.error(err)
+          return responses.getDataResponse(res, 500, err)
+        })
+    }
 
-    modelBooks.updateBook(id, data)
-      .then(result => {
-        data.id = id
-        if (result.affectedRows !== 0) 
-          return modelBooks.getOneBook(id)
-        else 
-          return responses.dataManipulationResponse(res, 400, 'Failed to update', data)
-      })
-      .then(result=>{
-        console.log(result)
-        if (result.length !== 0) responses.dataManipulationResponse(res, 200, 'Success updating data', result)
-        else return responses.dataManipulationResponse(res, 400, 'please refresh', data)
-      })
-      .catch(err => {
-        console.error(err)
-        return responses.getDataResponse(res, 500, err)
-      })
   },
   deleteBook: (req, res) => {
     const id = req.params.id

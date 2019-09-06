@@ -17,7 +17,7 @@ module.exports = {
             image: result.url,
             date_released: req.body.date_released,
             genre_id: req.body.genre_id,
-            availability: 1,
+            availability: req.body.availability,
             created_at: new Date(),
             Updated_at: new Date()
           }
@@ -184,7 +184,17 @@ module.exports = {
           return responses.getDataResponse(res, 500, err)
         })
     }
-
+  },
+  confirmBook:(req, res) => {
+    modelBooks.updateBook(req.params.id, {availability:1})
+      .then(result => {
+        if (result.length !== 0) responses.dataManipulationResponse(res, 200, 'Book Confirmed', result)
+        else return responses.dataManipulationResponse(res, 400, 'please refresh', data)
+      })
+      .catch(err => {
+        console.error(err)
+        return responses.getDataResponse(res, 500, err)
+      })
   },
   deleteBook: (req, res) => {
     const id = req.params.id

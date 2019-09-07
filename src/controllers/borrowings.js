@@ -13,7 +13,7 @@ module.exports = {
     modelBook.getAvailability(borrowingData.book_id)
       .then(result => {
         if (result[0].availability === 1) {
-          if(borrowingData.is_confirmed == 1) modelBook.setAvailability(borrowingData.book_id,1)
+          if(borrowingData.is_confirmed == 1) modelBook.setAvailability(borrowingData.book_id,0)
           return modelBorrowings.insertBorrowing(borrowingData) 
         } else {
           return responses.dataManipulationResponse(res, 409, 'Book is not yet available')
@@ -37,7 +37,7 @@ module.exports = {
         if (result[0].availability === 1) {
           return Promise.all([
             modelBorrowings.confirmBorrowing(id), 
-            modelBook.setAvailability(book_id,1)
+            modelBook.setAvailability(book_id,0)
           ])
         } else {
           return responses.dataManipulationResponse(res, 409, 'Book is not yet available')

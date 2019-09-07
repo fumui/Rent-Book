@@ -13,6 +13,7 @@ module.exports = {
     modelBook.getAvailability(borrowingData.book_id)
       .then(result => {
         if (result[0].availability === 1) {
+          if(borrowingData.is_confirmed == 1) modelBook.setAvailability(book_id)
           return modelBorrowings.insertBorrowing(borrowingData) 
         } else {
           return responses.dataManipulationResponse(res, 409, 'Book is not yet available')

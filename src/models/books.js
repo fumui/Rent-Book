@@ -20,9 +20,8 @@ module.exports = {
 
       if (availabilityIsNotNull || keywordIsNotNull) {
         query += `WHERE `
-        query += availabilityIsNotNull ? `availability = ${availability} ` : `NOT availability = 2`
-        query += availabilityIsNotNull && keywordIsNotNull ? `AND ` : ``
-        query += keywordIsNotNull ? `title LIKE '%${keyword}%' ` : ''
+        query += availabilityIsNotNull ? `availability = ${availability} ` : `NOT availability = 2 `
+        query += keywordIsNotNull ? `AND title LIKE '%${keyword}%' ` : ''
       }
 
       query += sort != null ? `ORDER BY ${sort} ` : ''
